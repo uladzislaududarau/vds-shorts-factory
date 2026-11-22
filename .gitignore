@@ -1,0 +1,20 @@
+.venv/
+.tools/
+.run/
+.secrets/
+.env
+node_modules/
+data/**
+database/**
+__pycache__/
+.pytest_cache/
+*.pyc
+!.gitkeep
+.DS_Store
+frontend/tsconfig.tsbuildinfo
+# Local tooling and internal QA reports (machine paths, private test data) — not part of the product.
+.taste-skill/
+docs/*.json
+docs/browser-qa/
+docs/QA.md
+scripts/*qa*.mjs

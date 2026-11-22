@@ -1,0 +1,62 @@
+# The studio is developed on a Mac; these jobs check every supported platform on real machines.
+name: tests
+on: [push, pull_request, workflow_dispatch]
+jobs:
+  unit:
+    strategy:
+      fail-fast: false
+      matrix:
+        include:
+          - {os: windows-latest, lock: backend/requirements-portable.lock, python: .venv\Scripts\python.exe}
+          - {os: ubuntu-latest, lock: backend/requirements-portable.lock, python: .venv/bin/python}
+          - {os: macos-latest, lock: backend/requirements-runtime.lock, python: .venv/bin/python}
+    runs-on: ${{ matrix.os }}
+    steps:
+      - uses: actions/checkout@v4
+      - uses: astral-sh/setup-uv@v6
+      - name: FFmpeg
+        shell: bash
+        run: |
+          case "$RUNNER_OS" in
+            Windows) choco install ffmpeg -y --no-progress ;;
+            Linux) sudo apt-get update -q && sudo apt-get install -yq ffmpeg ;;
+            macOS) brew install ffmpeg ;;
+          esac
+      - name: Python environment
+        run: |
+          uv venv --python 3.11 .venv
+          uv pip install --python ${{ matrix.python }} --no-deps -r ${{ matrix.lock }}
+      - name: Tests
+        env: {PYTHONUTF8: '1'}   # same as the supervised server (Windows defaults to cp1252)
+        run: ${{ matrix.python }} -m pytest -q
+
+  # A fresh install from this checkout exactly as a user runs it, then health check and uninstall.
+  installer:
+    strategy:
+      fail-fast: false
+      matrix:
+        os: [ubuntu-latest, macos-latest, windows-latest]
+    runs-on: ${{ matrix.os }}
+    steps:
+      - uses: actions/checkout@v4
+      - name: Install (macOS / Linux)
+        if: runner.os != 'Windows'
+        run: SHORTS_FACTORY_SOURCE="$PWD" SHORTS_FACTORY_NO_OPEN=1 bash install.sh
+      - name: Install (Windows)
+        if: runner.os == 'Windows'
+        shell: pwsh
+        run: |
+          $env:VDS_SOURCE = $PWD.Path; $env:VDS_NO_OPEN = '1'
+          ./install.ps1
+      - name: Server answers
+        shell: bash
+        run: curl -fsS http://127.0.0.1:8765/api/health && curl -fsS http://127.0.0.1:8765/ | grep -q 'VDS Shorts Factory'
+      - name: Uninstall (macOS / Linux)
+        if: runner.os != 'Windows'
+        run: bash install.sh --uninstall --purge
+      - name: Uninstall (Windows)
+        if: runner.os == 'Windows'
+        shell: pwsh
+        run: |
+          $env:VDS_ACTION = 'purge'
+          ./install.ps1

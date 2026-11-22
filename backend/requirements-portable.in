@@ -1,0 +1,25 @@
+# Runtime for every platform except Apple Silicon Macs (they use requirements-runtime.lock with MLX):
+# Windows x64 and Linux x86_64/arm64 (Intel Macs: requirements-macos-intel.lock, same input). Resolved into requirements-portable.lock with:
+#   .tools/uv pip compile backend/requirements-portable.in --universal --python-version 3.11 \
+#     -c backend/portable-constraints.txt -o backend/requirements-portable.lock
+# Same packages as the Apple Silicon lock, except speech recognition: faster-whisper (CTranslate2) instead of MLX.
+fastapi
+uvicorn
+python-multipart
+pydantic
+google-genai
+# Linux: the headless build (same cv2 module) needs no libGL, which servers and minimal systems lack.
+opencv-python==4.14.0.94 ; sys_platform != 'linux'
+opencv-python-headless==4.14.0.94 ; sys_platform == 'linux'
+scenedetect
+pillow
+yt-dlp==2026.10.26
+yt-dlp-ejs==0.8.0
+pycryptodomex==3.24.1
+websockets
+requests
+httpx
+pytest
+faster-whisper
+# Windows has no system time-zone database; zoneinfo needs it (publishing schedule).
+tzdata
