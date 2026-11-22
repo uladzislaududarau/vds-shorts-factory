@@ -57,6 +57,7 @@ PY="$APP_HOME/.venv/bin/python"
 download() {  # url target [sha256]
   local tries=0
   until curl -fL --progress-bar --retry 3 --connect-timeout 20 -C - -o "$2" "$1"; do
+    [ $? -eq 33 ] && rm -f "$2"   # the server can't resume (GitHub archives): start this file over
     tries=$((tries + 1)); [ "$tries" -ge 5 ] && fail "не удалось скачать $1. Проверьте интернет и запустите команду ещё раз — загрузка продолжится."
     sleep 3
   done
@@ -150,8 +151,8 @@ main() {
       | tar -C "$tmp/code" -xf -
   else
     [ -n "$REPO" ] || fail "в установщике не указан репозиторий GitHub (REPO)."
-    curl -fsSL --retry 3 "https://codeload.github.com/$REPO/tar.gz/refs/heads/$BRANCH" | tar -xz -C "$tmp/code" --strip-components 1 \
-      || fail "не удалось скачать код с GitHub. Проверьте интернет и повторите."
+    download "https://codeload.github.com/$REPO/tar.gz/refs/heads/$BRANCH" "$tmp/code.tar.gz"
+    tar -xzf "$tmp/code.tar.gz" -C "$tmp/code" --strip-components 1 || fail "скачанный архив с кодом повреждён. Запустите установку ещё раз."
   fi
   [ -f "$tmp/code/backend/main.py" ] && [ -f "$tmp/code/frontend/dist/index.html" ] || fail "скачанный код неполный."
 
@@ -168,9 +169,13 @@ main() {
     download "https://astral.sh/uv/install.sh" "$tmp/install-uv.sh"
     UV_INSTALL_DIR="$APP_HOME/.tools" UV_NO_MODIFY_PATH=1 sh "$tmp/install-uv.sh" >/dev/null
   fi
-  export UV_CACHE_DIR="$APP_HOME/.tools/uv-cache" UV_PYTHON_INSTALL_DIR="$APP_HOME/.tools/python" UV_HTTP_TIMEOUT=300
-  .tools/uv venv --quiet --python 3.11 --allow-existing .venv
-  .tools/uv pip install --quiet --python .venv/bin/python --no-deps -r "$LOCK"
+  # Few parallel downloads: on a slow link dozens of them starve each other until each one times out.
+  export UV_CACHE_DIR="$APP_HOME/.tools/uv-cache" UV_PYTHON_INSTALL_DIR="$APP_HOME/.tools/python" UV_HTTP_TIMEOUT=300 UV_CONCURRENT_DOWNLOADS=2
+  local attempt=1
+  until .tools/uv venv --quiet --python 3.11 --allow-existing .venv && .tools/uv pip install --python .venv/bin/python --no-deps -r "$LOCK"; do
+    [ "$attempt" -ge 10 ] && fail "интернет слишком нестабилен. Запустите команду ещё раз — уже скачанное повторно не загружается."
+    attempt=$((attempt + 1)); info "Связь прервалась — продолжаю с места обрыва (попытка $attempt из 10)…"; sleep 5
+  done
   .venv/bin/python -c "import fastapi, cv2, $SPEECH" || fail "библиотеки установились с ошибкой."
 
   say "3/5 · Устанавливаю FFmpeg и Node.js"

@@ -128,12 +128,17 @@ function Install-VdsShortsFactory {
     $env:UV_CACHE_DIR = Join-Path $tools 'uv-cache'
     $env:UV_PYTHON_INSTALL_DIR = Join-Path $tools 'python'
     $env:UV_HTTP_TIMEOUT = '300'
+    $env:UV_CONCURRENT_DOWNLOADS = '2'   # on a slow link many parallel downloads starve each other into timeouts
     Push-Location $AppHome
     try {
-      & $uv venv --quiet --python 3.11 --allow-existing .venv
-      if ($LASTEXITCODE -ne 0) { Fail 'не удалось установить Python.' }
-      & $uv pip install --quiet --python .venv\Scripts\python.exe --no-deps -r backend\requirements-portable.lock
-      if ($LASTEXITCODE -ne 0) { Fail 'не удалось установить библиотеки. Проверьте интернет и запустите команду ещё раз.' }
+      for ($attempt = 1; ; $attempt++) {
+        & $uv venv --quiet --python 3.11 --allow-existing .venv
+        if ($LASTEXITCODE -eq 0) { & $uv pip install --python .venv\Scripts\python.exe --no-deps -r backend\requirements-portable.lock }
+        if ($LASTEXITCODE -eq 0) { break }
+        if ($attempt -ge 10) { Fail 'интернет слишком нестабилен. Запустите команду ещё раз — уже скачанное повторно не загружается.' }
+        Info "Связь прервалась — продолжаю с места обрыва (попытка $($attempt + 1) из 10)…"
+        Start-Sleep -Seconds 5
+      }
       & $Python -c 'import fastapi, faster_whisper, cv2'
       if ($LASTEXITCODE -ne 0) { Fail 'библиотеки установились с ошибкой.' }
 
