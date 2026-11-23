@@ -1,3 +1,4 @@
+import {tr} from '../i18n';
 import {useEffect,useRef,useState} from 'react';
 import {Loader2,Play,Power,RotateCcw} from 'lucide-react';
 import {Button} from './ui/button';
@@ -44,25 +45,25 @@ export function useServer(onRecovered:()=>void):Server{
   stop:async()=>{await post('/system/stop');begin('stopping')}};
 }
 
-const LABEL:Record<ServerState,string>={online:'Сервер работает',offline:'Сервер остановлен',starting:'Запускается…',restarting:'Перезапуск…',stopping:'Останавливается…'};
+const LABEL=():Record<ServerState,string>=>({online:tr("Статус: активно"),offline:tr("Статус: остановлен"),starting:tr("Статус: запуск…"),restarting:tr("Статус: перезапуск…"),stopping:tr("Статус: остановка…")});
 
 export function ServerBadge({server,activeJobs}:{server:Server;activeJobs:number}){
  const [open,setOpen]=useState(false),[error,setError]=useState('');
  const box=useRef<HTMLDivElement>(null);
  useEffect(()=>{if(!open)return;const close=(e:MouseEvent)=>{if(!box.current?.contains(e.target as Node))setOpen(false)};document.addEventListener('mousedown',close);return()=>document.removeEventListener('mousedown',close)},[open]);
  const busy=['starting','restarting','stopping'].includes(server.state);
- const confirmJobs=(action:string)=>!activeJobs||confirm(`Сейчас в работе задач: ${activeJobs}. Они встанут на паузу — продолжить их можно в «Очереди». ${action}?`);
+ const confirmJobs=(action:string)=>!activeJobs||confirm(tr("Сейчас в работе задач: {0}. Они встанут на паузу — продолжить их можно в «Очереди». {1}?",[activeJobs,action]));
  const run=async(fn:()=>Promise<void>)=>{setError('');try{await fn();setOpen(false)}catch(e:any){setError(e.message)}};
  return <div className="server-status" ref={box}>
-  <button className={'server-pill '+server.state} onClick={()=>server.state==='offline'?server.start():setOpen(!open)} aria-expanded={open} title={LABEL[server.state]}>
-   {busy?<Loader2 size={13} className="spin"/>:<i className="server-dot"/>}<span>{server.state==='offline'?'Сервер остановлен · Запустить':LABEL[server.state]}</span>
+  <button className={'server-pill '+server.state} onClick={()=>server.state==='offline'?server.start():setOpen(!open)} aria-expanded={open} title={LABEL()[server.state]}>
+   {busy?<Loader2 size={13} className="spin"/>:<i className="server-dot"/>}<span>{server.state==='offline'?tr("Статус: остановлен · Запустить"):LABEL()[server.state]}</span>
   </button>
   {open&&server.state==='online'&&<div className="server-menu" role="menu">
-   <p>Сервер студии работает на этом компьютере: 127.0.0.1:8765</p>
+   <p>{tr("Сервер студии работает на этом компьютере: 127.0.0.1:8765")}</p>
    {server.managed?<>
-    <button role="menuitem" onClick={()=>confirmJobs('Перезапустить')&&run(server.restart)}><RotateCcw size={15}/>Перезапустить</button>
-    <button role="menuitem" onClick={()=>confirmJobs('Остановить')&&run(server.stop)}><Power size={15}/>Остановить</button>
-   </>:<p className="muted">Сервер запущен вручную из терминала — управляйте им там.</p>}
+    <button role="menuitem" onClick={()=>confirmJobs(tr("Перезапустить"))&&run(server.restart)}><RotateCcw size={15}/>{tr("Перезапустить")}</button>
+    <button role="menuitem" onClick={()=>confirmJobs(tr("Остановить"))&&run(server.stop)}><Power size={15}/>{tr("Остановить")}</button>
+   </>:<p className="muted">{tr("Сервер запущен вручную из терминала — управляйте им там.")}</p>}
    {error&&<p className="inline-error">{error}</p>}
   </div>}
  </div>;
@@ -71,11 +72,11 @@ export function ServerBadge({server,activeJobs}:{server:Server;activeJobs:number
 export function ServerDownBanner({server}:{server:Server}){
  if(server.state==='online'||server.state==='restarting')return null;
  return <div className="server-down" role="alert">
-  <div><strong>{server.state==='starting'?'Запускаю сервер…':server.state==='stopping'?'Сервер останавливается…':'Сервер VDS Shorts Factory не запущен'}</strong>
+  <div><strong>{server.state==='starting'?tr("Запускаю сервер…"):server.state==='stopping'?tr("Сервер останавливается…"):tr("Сервер VDS Shorts Factory не запущен")}</strong>
    <p>{server.state==='starting'&&server.slow
-     ?'Запуск занимает дольше обычного. Если браузер спросил разрешение открыть «VDS Shorts Factory» — разрешите. Или откройте VDS Shorts Factory '+(IS_WINDOWS?'из меню «Пуск» или ярлыком на рабочем столе.':IS_LINUX?'из меню приложений.':'из Launchpad или папки «Программы».')
-     :'Проекты и файлы сохранены. Нажмите «Запустить» — откроется приложение VDS Shorts Factory и запустит сервер. Браузер может один раз спросить разрешение.'}</p></div>
-  {server.state==='offline'&&<Button variant="default" onClick={server.start}><Play size={15}/>Запустить</Button>}
+     ?tr("Запуск занимает дольше обычного. Если браузер спросил разрешение открыть «VDS Shorts Factory» — разрешите. Или откройте VDS Shorts Factory ")+(IS_WINDOWS?tr("из меню «Пуск» или ярлыком на рабочем столе."):IS_LINUX?tr("из меню приложений."):tr("из Launchpad или папки «Программы»."))
+     :tr("Проекты и файлы сохранены. Нажмите «Запустить» — откроется приложение VDS Shorts Factory и запустит сервер. Браузер может один раз спросить разрешение.")}</p></div>
+  {server.state==='offline'&&<Button variant="default" onClick={server.start}><Play size={15}/>{tr("Запустить")}</Button>}
   {server.state!=='offline'&&<Loader2 size={20} className="spin"/>}
  </div>;
 }
