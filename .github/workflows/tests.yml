@@ -14,14 +14,20 @@ jobs:
     steps:
       - uses: actions/checkout@v4
       - uses: astral-sh/setup-uv@v6
-      - name: FFmpeg
+      - name: FFmpeg (Windows)
+        if: runner.os == 'Windows'
+        shell: pwsh
+        run: ./.github/scripts/install-ffmpeg.ps1
+      - name: FFmpeg (macOS / Linux)
+        if: runner.os != 'Windows'
         shell: bash
         run: |
           case "$RUNNER_OS" in
-            Windows) choco install ffmpeg -y --no-progress ;;
             Linux) sudo apt-get update -q && sudo apt-get install -yq ffmpeg ;;
             macOS) brew install ffmpeg ;;
           esac
+          ffmpeg -version
+          ffprobe -version
       - name: Python environment
         run: |
           uv venv --python 3.11 .venv
