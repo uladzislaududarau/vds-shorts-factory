@@ -1,21 +1,27 @@
-# AI-провайдеры
+# AI providers
 
 ## Local
 
-Нативный MLX Whisper (`mlx-whisper` 0.4.3), Metal, `word_timestamps=True`, русский/английский, кэш в проекте. Первый запуск скачивает веса. PySceneDetect ContentDetector определяет смены сцены. Локальный отбор собирает смысловые единицы по окончаниям фраз и паузам, оценивает языковые признаки и подавляет сильное перекрытие и похожий текст. Сцены сохраняются и показаны на timeline; локальная оценка Visual Interest не выдумывается.
+Apple Silicon uses native MLX Whisper (`mlx-whisper` 0.4.3) with Metal and `word_timestamps=True`; other supported platforms use faster-whisper. Model weights download on first use. PySceneDetect ContentDetector identifies scene changes. Local selection groups phrases using sentence endings and pauses, scores language features, and suppresses excessive overlap or similar text. Scenes are saved and shown on the timeline. Local analysis does not invent a Visual Interest score.
 
 ## Gemini
 
-Официальный `google-genai`, Python Pydantic structured outputs. Доступные модели запрашиваются `client.models.list()`. В приложении нет фиксированного устаревающего default model ID: его выбирает пользователь после проверки аккаунта.
+The adapter uses the official `google-genai` SDK and Pydantic structured outputs. Available models come from `client.models.list()`. Users select a model after checking account access; the application does not rely on a fixed default model ID.
 
-Pass A: окна транскрипции 180 с, шаг 150 с; небольшое число полноценных кандидатов. Pass B: реальные аудио+видео превью каждого перспективного кандидата, 384 px, 2 fps, AAC; повторная оценка полноты и восьми критериев. На запросах действует model/schema/content cache и retries 429/5xx. Ответы проверяются на source_video_id, числовые диапазоны, порядок и границы времени. Word timestamps используются для аккуратной привязки к словам.
+Pass A uses 180-second transcript windows with a 150-second stride to select a limited number of complete candidates. Pass B reviews actual audio/video previews at 384 px, 2 fps and AAC, reassessing completeness and eight criteria. Requests use model/schema/content caching and retries for 429/5xx responses. Responses are checked for source video ID, numeric ranges, ordering and time bounds; word timestamps refine boundaries.
 
-Публичный YouTube URL передаётся как `Part.from_uri(..., mime_type='video/mp4')`, без скачивания в облачном режиме. API-возможность зависит от модели, аккаунта и публичности видео. Без исходника локальный рендер недоступен. Не скачивайте материалы без соответствующих прав.
+A public YouTube URL can be passed as `Part.from_uri(..., mime_type='video/mp4')` without downloading in cloud mode. Support depends on the model, account and video visibility. Local rendering still requires a local source file. Only download material you have permission to use.
 
-Разрешения: глобальный cloud toggle, выбранный provider и per-job `cloud_consent`; локальный режим не отправляет ни видео, ни транскрипцию в Gemini. Проверка ключа запрашивает только модели. HTTP timeouts, ограничение количества запросов и токенов, usage metadata, оценка расходов с пользовательскими тарифами. Затраты не названы фактическим счётом. Ошибки провайдера могут списать токены без возврата usage; жёсткий финансовый предел следует настроить на стороне провайдера.
+Cloud processing requires the global toggle, selected provider and per-job `cloud_consent`. Local mode sends neither video nor transcript to Gemini. Connection testing requests models only. HTTP timeouts, request/token limits, usage metadata and user-provided pricing support estimated costs; these estimates are not an invoice. Provider errors may consume tokens without returning usage. Configure a hard financial limit with the provider.
 
-Секрет хранится в backend-файле 0600, не в SQLite, frontend, manifest или API-ответах. Значение редактируется перед записью сообщения ошибки. Ключ никогда не передаётся shell аргументом.
+The secret is stored in a backend file with `0600` permissions, never in SQLite, the frontend, manifests or API responses. Error messages redact its value. Keys are never shell arguments.
 
-Официальные источники API, проверенные при разработке: [видео и YouTube](https://ai.google.dev/gemini-api/docs/video-understanding), [structured outputs](https://ai.google.dev/gemini-api/docs/structured-output), [Python SDK](https://github.com/googleapis/python-genai), [MLX Whisper](https://github.com/ml-explore/mlx-examples/tree/main/whisper), [тарифы](https://ai.google.dev/gemini-api/docs/pricing). Форматы и доступность меняются: список аккаунта и ошибки реального запроса являются окончательной проверкой совместимости.
+## OpenAI
 
-Реальный Gemini-анализ нельзя считать проверенным без подключённого пользовательского ключа. Unit/integration mock проверяет только контракт и сохранение, не качество ответа облака.
+OpenAI analyzes the transcript and then selected frames from promising clips. It requires a downloaded local source; this adapter does not send continuous video or original audio. Requests use the Responses API, `store:false` and a strict JSON schema. Model access, cloud consent, request limits and estimated budgets are configured separately. See [AI connections](AI_CONNECTIONS.md) for setup, token accounting and the separate script/voice pilot.
+
+## References and verification limits
+
+Official implementation references: [Gemini video and YouTube](https://ai.google.dev/gemini-api/docs/video-understanding), [structured outputs](https://ai.google.dev/gemini-api/docs/structured-output), [Python SDK](https://github.com/googleapis/python-genai), [MLX Whisper](https://github.com/ml-explore/mlx-examples/tree/main/whisper), and [Gemini pricing](https://ai.google.dev/gemini-api/docs/pricing). Availability changes; the account's model list and actual requests determine compatibility.
+
+Mock unit/integration tests verify contracts and persistence, not cloud response quality. Real Gemini analysis is not verified for a user's installation until it has succeeded with that user's key.

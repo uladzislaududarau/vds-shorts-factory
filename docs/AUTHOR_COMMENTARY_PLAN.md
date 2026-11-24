@@ -1,151 +1,124 @@
-# План режима авторского видеоразбора
+# Original video commentary: implementation plan
 
-Дата: 16 ноября 2026 года. Статус: проектирование; функции ниже не считаются реализованными. Код приложения и реальные публикации в рамках этого анализа не меняются.
+Date: November 16, 2026. Status: design proposal, not a list of implemented features. This document does not authorize public uploads.
 
-Последующее обновление: после согласования пробы OpenAI добавлены настройки OpenAI/ElevenLabs и отдельный пилот «кадры → английский сценарий → озвучка». Это не полный производственный режим из этого плана. Текущее состояние и подключение: [AI_CONNECTIONS.md](AI_CONNECTIONS.md).
+Later updates added OpenAI/ElevenLabs settings and a separate frames → English script → voice pilot. That is not the complete production workflow described here. See [AI connections](AI_CONNECTIONS.md) for the pilot. A separate general-purpose [publishing module](YOUTUBE_PUBLISHING.md) was also implemented later; the commentary-specific editorial gate below remains proposed.
 
-## Цель и границы
+## Goal and boundaries
 
-Создавать самостоятельные англоязычные Shorts с наблюдениями, аргументами и поясняющей графикой на основе разрешённых материалов. Основной результат — авторский разбор с новой редакторской ценностью. Изменение картинки, новая озвучка или очистка метаданных сами по себе не гарантируют отсутствие copyright claims, strikes, ограничений либо проблем с монетизацией.
+Create original English-language Shorts with observations, arguments and explanatory graphics from authorized material. The result should add editorial value. Image changes, new speech or metadata cleanup alone do not guarantee freedom from copyright claims, strikes, restrictions or monetization issues.
 
-Сохранить текущую обычную нарезку как отдельный режим. Добавить «Авторский разбор»: исходник → подтверждённые наблюдения → сценарий → озвучка → раскадровка → монтаж → проверка → публикационная очередь.
+Keep ordinary clipping as a separate mode. Add Original commentary: source → verified observations → script → voice → storyboard → edit → review → publishing queue.
 
-## Что уже существует
+## Baseline when this plan was written
 
-| Область | Фактическая основа | Чего пока нет |
+| Area | Existing foundation | Missing in the proposed workflow |
 |---|---|---|
-| Материал | Авторизованная загрузка YouTube, локальные оригиналы, SHA-256, поля прав | Проверки юридического основания и документов |
-| Анализ | MLX Whisper, сцены, локальная эвристика; адаптер Gemini с видео-превью | Каталога доказанных визуальных наблюдений, фактчекинга, редакторских тем |
-| Сценарии | Названия/описания кандидатов | Генерации самостоятельного сценария с привязкой утверждений к доказательствам |
-| Озвучка | Аудиодорожка оригинала; синтетические macOS-голоса использовались в тестовых материалах | Производственного TTS-провайдера и выбора лицензированного голоса |
-| Монтаж | FFmpeg, несколько сегментов, crop, субтитры, нормализация, MP4/QC | Сценарной раскадровки, наложения новой речи, содержательных callout/comparison-шаблонов |
-| Проверки | Техническое QC, декларативные поля прав | Редакторских правил, документов использования, статусов ручной проверки |
-| Публикации | Согласована концепция 24/7 раз в час, Asia/Nicosia | OAuth-загрузчика, календаря и реальной автопубликации |
+| Material | Authorized YouTube download, local originals, SHA-256 and rights fields | Validation of legal basis and supporting documents |
+| Analysis | MLX Whisper, scenes, local heuristics and Gemini preview review | Evidence-backed observations, fact checking and editorial topics |
+| Scripts | Candidate titles/descriptions | Independent scripts linking claims to evidence |
+| Speech | Source audio and synthetic macOS voices in test fixtures | Production TTS provider and licensed voice selection |
+| Editing | FFmpeg, segments, crop, captions, normalization and MP4/QC | Script-based storyboard, new speech and meaningful callout/comparison templates |
+| Review | Technical QC and declared rights fields | Editorial rules, usage documents and manual review states |
+| Publishing | Agreed hourly Asia/Nicosia concept | At the time, OAuth upload, calendar and actual automated publishing |
 
-Текущая локальная эвристика не является анализатором визуальных фактов: visual_interest в ней равен нулю. Нынешний Gemini-проход проверяет предлагаемые фрагменты, а не заменяет новый модуль исследования всего трейлера. API-ключ и качество модели нужно проверять на реальном пилоте.
+This table is historical. Subsequent TTS, audio replacement and publishing are documented separately; they do not implement the full commentary workflow.
 
-## Первая версия
+Local heuristics are not a visual-fact analyzer: `visual_interest` is zero. Existing Gemini review assesses candidate fragments rather than researching an entire trailer. Model access and quality require a real pilot.
 
-- Одна тематика: разбор игровых трейлеров/геймплея из источников с установленным основанием использования.
-- Один английский голос, один язык сценария.
-- Формат 9:16, ориентировочно 30–60 секунд, одна самостоятельная тема на ролик.
-- Несколько коротких иллюстрирующих эпизодов, собственные подписи/объяснения/выделения. Примерный объём сценария — 70–120 слов с последующей проверкой реальной длительности озвучки.
-- Три ограниченных графических шаблона: выделение детали; стоп-кадр с пояснением; сравнение двух разрешённых материалов.
-- Без генерации новых фотореалистичных сцен и без копирования чужого узнаваемого голоса.
-- Музыка оригинального трейлера не переносится по умолчанию. Используется новая речь; дополнительная музыка — только с установленными условиями использования.
-- Не требуется выдавать заданное количество тем любой ценой. Если подтверждены пять самостоятельных тем, выпускать пять, а не 55 почти одинаковых роликов.
+## First version
+
+- One topic area: gaming trailers/gameplay with an established usage basis.
+- One English voice and script language.
+- Vertical 9:16, approximately 30–60 seconds, one independent topic per video.
+- Several short illustrative excerpts plus original captions, explanation and emphasis. Aim for 70–120 script words, then measure actual speech duration.
+- Three limited graphic templates: detail highlight, annotated freeze frame and comparison of two authorized sources.
+- No new photorealistic scene generation or imitation of someone else's recognizable voice.
+- Do not carry original trailer music by default. Use new speech and additional music only under established terms.
+- Do not force a topic count. Five supported topics should produce five videos rather than dozens of near-duplicates.
 
 ## 1. AI Video Analyzer
 
-Обрабатывать видеоряд вместе со звуком и сценами. Сохранять наблюдения, а не только свободный текст модели.
+Process images together with audio and scene boundaries. Store observations rather than only free-form model prose. Each observation needs a source ID/version, exact timestamps, a saved frame/segment reference, an optional image region, an observed fact separated from interpretation, an external source for claims beyond what is visible, review status, uncertainty reason and analysis/model version.
 
-Для каждого наблюдения нужны:
+A topic template might be: a construction is visible → show the detail → explain its possible significance. This must not become a claim of confirmed gameplay functionality without evidence. Label hypotheses as hypotheses.
 
-- идентификатор источника и его версия;
-- точные таймкоды и ссылка на сохранённый кадр/эпизод;
-- область изображения, если выделяется конкретная деталь;
-- наблюдаемый факт и отдельная интерпретация;
-- внешний источник, если утверждение выходит за пределы видимого в кадре;
-- статус проверки, причина сомнения и версия модели/анализа.
-
-Пример формата темы, не утверждение о конкретном ролике: «На кадре видна определённая конструкция → показываем её крупно → объясняем возможное значение». Нельзя автоматически превращать такое наблюдение в обещание подтверждённой игровой механики. Гипотезы должны быть сформулированы как гипотезы.
-
-В первой версии внешние источники — заданные пользователем/редактором первичные материалы. Автономное исследование произвольного интернета лучше выделить в последующий этап. Сравнение с другим трейлером разрешается только при наличии самого второго источника и основания его использования.
-
-Результат: карточки тем с доказательствами. Семантическая точность модели заранее не обещается; привязка к кадру сама по себе ещё не доказывает правильность интерпретации.
+For the first version, external evidence is editor/user-supplied primary material. Autonomous web research belongs to a later stage. Comparisons require the second source itself and permission to use it. The output is topic cards with evidence. Frame references do not by themselves establish interpretation accuracy.
 
 ## 2. Original Script Generator
 
-Сценарий строится из проверенной темы, а не из перефразирования исходного диалога.
+Build scripts from verified topics rather than paraphrasing source dialogue. Structure: thesis/question → observation → explanation/comparison → conclusion. Link every checkable claim to evidence. Do not add unsupported dates, game features, developer intentions or release promises.
 
-Структура: тезис/вопрос → наблюдение → объяснение/сопоставление → вывод. Каждое проверяемое утверждение связывается с карточкой доказательства. В текст не добавляются неподтверждённые даты, функции игры, намерения разработчиков или обещания релиза.
-
-Сохраняются английский текст, его версия, утверждения, источники, соответствие фраз кадрам и планируемая длительность. Проверяются повторение прежних тем, близость к исходной речи и к другим сценариям канала. Проверка похожести — редакторский сигнал, а не юридическое подтверждение оригинальности.
+Store English text, version, claims, sources, phrase-to-frame mapping and planned duration. Check repeated channel topics and similarity to source speech or other scripts. Similarity is an editorial signal, not legal proof of originality.
 
 ## 3. AI Voiceover
 
-Подключить один TTS-провайдер с подходящими правами на коммерческое использование выбранного голоса. Для первого прототипа пригоден адаптер сервиса, возвращающего речь и временную разметку: например, у ElevenLabs есть endpoint с character-level timestamps, из которых можно собрать word timestamps.
+Connect one TTS provider with suitable commercial terms for the chosen voice. A service returning speech alignment can support the prototype; for example, ElevenLabs character timestamps can be grouped into word timestamps.
 
-Сохранять текст, voice/model ID, настройки, аудиофайл, длительность и разметку. Повторная генерация одного и того же результата использует кэш. Смена сценария/голоса создаёт новую версию. Субтитры используют утверждённый текст сценария, а не ошибочный повторный пересказ распознавателя.
+Store text, voice/model IDs, settings, audio, duration and alignment. Cache identical generation. A changed script/voice creates a new version. Captions use the approved script rather than a second speech recognizer's transcription.
 
-Предусмотреть словарь произношения игровых названий, прослушивание, предел расходов и ограниченные повторные попытки. Перед выбором поставщика нужно проверить тариф и условия конкретного голоса; доступность голоса в каталоге сама по себе не заменяет проверку условий использования.
+Include a game-name pronunciation dictionary, auditioning, spending limits and bounded retries. Verify plan and voice terms before selecting a provider; catalog availability is not a usage license.
 
 ## 4. Smart Video Editor
 
-Создать новый монтажный план, привязанный к фактической длительности новой речи. Использовать существующий FFmpeg-рендерер как основу.
+Create a new editing plan using actual speech duration and the existing FFmpeg renderer. Add illustration selection for each claim, trims/freezes/pans to relevant regions, frames/arrows/short annotations, comparisons of real sources, source-speech replacement, new-speech caption alignment and readability/duration/QC checks.
 
-Новые операции:
+Use regions of interest for environmental details; face tracking cannot identify arbitrary objects. New layouts need not use blur by default. Validate all coordinates and timestamps. Uncertain detail localization needs review rather than a random crop. Start with limited templates; general automatic directing is a later research goal.
 
-- подобрать иллюстрацию к конкретному утверждению;
-- выполнить обрезку/стоп-кадр/панорамирование на нужной области;
-- наложить рамку, стрелку и короткое пояснение;
-- построить сравнение из двух действительных источников;
-- заменить исходную речь новой озвучкой;
-- синхронизировать подписи по разметке новой речи;
-- проверить читаемость, длительность, отсутствие обрезанных слов и техническое качество.
+## 5. Rights and Editorial Gate
 
-Для деталей окружения использовать область интереса; трекинг лица не заменяет поиск нужного объекта. По умолчанию новые макеты не требуют размытого фона. Все координаты/таймкоды валидируются. При сомнительной локализации детали нужен просмотр, а не случайный кроп.
+Check documented conditions and editorial/technical signals. This is not a legal certificate or Content ID predictor.
 
-Менять сначала ограниченный набор шаблонов. Универсальная автоматическая режиссура для любого жанра — последующий исследовательский этап, не обещание первой версии.
+The current rights checkbox is a user declaration. Add a permissions register containing authorization type, document/link, scope, commercial terms, attribution, expiry and manual confirmation. Public availability on YouTube is not permission.
 
-## 5. Rights & Editorial Gate
+Before expensive generation, check the established basis for source/audio use and the intended use. Before release, check evidence, original analysis, repetition, images/voice usage and QC.
 
-Назначение: проверка документированных условий и редакторских/технических признаков. Это не юридический сертификат и не предсказатель Content ID.
-
-Текущий флажок прав в приложении — декларация пользователя. Его нужно дополнить реестром оснований: тип разрешения, ссылка/документ, область применения, коммерческое использование, требования атрибуции, срок и ручное подтверждение условий. Доступность видео на YouTube не является таким подтверждением.
-
-Проверки перед дорогостоящей генерацией: есть ли установленное основание для источников и аудио, разрешён ли выбранный способ использования. Проверки перед выдачей: поддержаны ли утверждения, есть ли собственная аналитическая мысль, не повторяет ли ролик предыдущий выпуск, корректно ли использованы изображения/озвучка и пройден ли QC.
-
-Статусы:
-
-| Статус | Действие |
+| State | Action |
 |---|---|
-| READY | Пройдены настроенные проверки, основание использования ранее подтверждено человеком; ролик может поступать в разрешённую очередь публикаций |
-| REVIEW | Неясные права, сомнительный факт, спорная иллюстрация или другое объяснимое сомнение; остаётся локально до проверки |
-| BLOCKED | Непройденная обязательная проверка/известное запрещающее условие; загрузка не запускается |
+| READY | Configured checks passed and a person already confirmed the usage basis; eligible for an authorized publishing queue |
+| REVIEW | Unclear rights, doubtful fact, questionable illustration or another explained concern; remains local pending review |
+| BLOCKED | A mandatory check failed or a known prohibition applies; do not upload |
 
-Не показывать «0% риска» или «юридически безопасно». Не оценивать fair use одним процентом изменения картинки/длиной отрывка. Если использование основано на спорном исключении из авторского права, оно остаётся предметом ручной квалифицированной оценки. Сам AI не переводит такой случай в READY.
+Do not show “0% risk” or “legally safe.” Do not decide fair use from a percentage of changed pixels or excerpt duration. Disputed legal exceptions require qualified human assessment; AI must not automatically mark those cases READY.
 
-Хранить причины решения и пакет доказательств внутри проекта. Если условия лицензии требуют указания автора/источника, публикационное описание должно это соблюдать. Очистка тегов MP4 не отменяет такого требования. Настройки AI-disclosure выбираются по содержанию и применимым правилам, а не скрываются изменением файла.
+Keep decision reasons and evidence inside the project. Meet attribution requirements in publication descriptions. MP4 tag removal does not cancel attribution. Choose AI disclosure based on content and applicable rules, rather than attempting to hide it through file changes.
 
-## Автопубликация
+## Automatic publishing
 
-Сохраняется согласованный режим: 24/7, интервал 60 минут, Asia/Nicosia. Только READY-ролики попадают в согласованный план. REVIEW/BLOCKED не публикуются и не получают «разрешение» из-за заполненного расписания. Если готовых роликов нет, слот остаётся пустым.
+The planned cadence is hourly, 24/7, in Asia/Nicosia. Only READY videos enter an authorized schedule. REVIEW/BLOCKED do not become eligible merely to fill slots. Leave empty slots when nothing qualifies.
 
-Публикационный модуль разрабатывается отдельно: OAuth канала, загрузка с продолжением, закрытый доступ до назначения времени, хранение YouTube ID, календарь, защита от повторной отправки и отмена серверного расписания. Нынешняя сессия скачивания не заменяет OAuth для публикации. Этот модуль пока существует только как согласованный план.
+Channel OAuth, resumable private-first uploads, video IDs, scheduling, deduplication and cancellation are a separate module. Download sessions do not replace upload OAuth. That general module was implemented after this plan; commentary-specific READY/REVIEW/BLOCKED integration remains to be built.
 
-## Данные, очередь и расходы
+## Data, queue and spending
 
-Добавить отдельные сущности проекта разбора: наблюдения/доказательства, версии сценариев, озвучки, раскадровки, решения Gate и ссылки на публикационную очередь. Не переделывать обычные клипы в сценарные проекты неявно.
+Add separate commentary entities for evidence, script versions, voice tracks, storyboards, gate decisions and publishing links. Do not silently convert ordinary clips into script projects.
 
-Этапы очереди: анализ → сценарий → проверка → TTS → раскадровка → рендер → финальный Gate. Каждый этап сохраняет результат и может повторяться отдельно. Новая версия входа инвалидирует только зависимые результаты. Ключи API и upload credentials не попадают в логи/экспорт.
+Queue stages: analysis → script → review → TTS → storyboard → render → final gate. Save and independently retry each stage. New input versions invalidate only dependent results. API/upload credentials must never enter logs or exports.
 
-Учёт отдельно для визуального анализа, генерации текста и TTS. Нужны лимиты на один проект и на день, кэш и остановка при недостатке бюджета. Стоимость и скорость измеряются на пилоте; фиксированные цены/время на ролик до выбора моделей, голоса и исходников не обещаются.
+Track visual analysis, text generation and TTS separately. Add per-project and daily limits, caching and budget stops. Measure price/speed during the pilot; do not promise fixed costs or time before selecting models, voices and sources.
 
-## Последовательность реализации и приёмка
+## Implementation sequence and acceptance
 
-1. **Пилот содержания.** Выбрать 2–3 разрешённых исходника и создать несколько карточек доказательств/сценариев. Человек проверяет каждое утверждение и самостоятельность темы. Без публичных загрузок.
-2. **Первый вертикальный срез.** Из одной проверенной темы получить один законченный английский MP4 с TTS, синхронными подписями и одним графическим шаблоном. Затем 5–10 разных тестовых роликов. Оценить произношение, смысл, кадры, читаемость, цену и время.
-3. **Продуктовый режим.** Добавить UI, пакетную обработку, версии, лимиты, все три шаблона, очередь REVIEW и правила реестра разрешений. Проверить паузу, перезапуск и восстановление без лишних платных повторов.
-4. **Публикационный модуль.** Подключить канал отдельно, проверить разрешённую тестовую загрузку, расписание и блокировку REVIEW/BLOCKED. Только после этого включить автоматическую публикацию партий READY.
+1. **Content pilot.** Choose 2–3 authorized sources and create evidence/script cards. A person checks every claim and topic's independence. No public uploads.
+2. **First complete slice.** Produce one English MP4 from a checked topic using TTS, synchronized captions and one graphic template; then test 5–10 distinct videos. Assess pronunciation, meaning, imagery, readability, cost and time.
+3. **Product workflow.** Add UI, batches, versions, limits, all three templates, a REVIEW queue and permission-register rules. Verify pause/restart recovery without unnecessary paid repeats.
+4. **Publishing integration.** Connect the channel separately and verify an authorized test upload, scheduling and REVIEW/BLOCKED rejection before enabling READY batches.
 
-Критерии пилота: утверждения проверены по настоящим источникам; сценарий не является пересказом чужого монолога; графика показывает нужную деталь; новая речь совпадает с субтитрами; аудио не обрезано; все MP4 проходят QC. Неподтверждённый факт исправляется/удаляется либо отправляется на просмотр. Нельзя обещать числовую точность модели без измерения на таком наборе.
+Acceptance requires claims checked against actual sources, an independent script rather than a paraphrased monologue, graphics showing the intended details, speech/caption alignment, complete audio and successful MP4 QC. Correct/remove unsupported claims or send them to review. Do not promise numeric accuracy without measurement.
 
-Автотесты обязаны подтверждать, что отсутствие основания прав, повреждённый файл, невалидные координаты, незавершённая озвучка, превышение бюджета и статус REVIEW/BLOCKED не приводят к загрузке. Публикация после перезапуска не должна отправляться повторно.
+Tests must prevent uploads for missing usage basis, damaged files, invalid coordinates, incomplete speech, exhausted budgets or REVIEW/BLOCKED states. Restart must not create duplicate uploads.
 
-## Оценка реализуемости
+## Feasibility
 
-- **Высокая уверенность в инженерной реализации:** очередь, TTS-интеграция, синхронизация по таймкодам, ограниченные шаблоны графики, сохранение версий, технические проверки, статусы/ручной разбор и API-публикация.
-- **Качество нужно доказать пилотом:** интересность наблюдений, верность интерпретаций, самостоятельность сценариев и содержательный выбор кадров. Список всех значимых деталей или профессиональная режиссура без просмотра не гарантируются.
-- **Гарантировать нельзя:** отсутствие claims/strikes, юридическую правомерность каждого заимствования, автоматическое решение fair use, одобрение монетизации и успех роликов у аудитории.
+Engineering confidence is high for queues, TTS integration, timestamp synchronization, limited graphics, versions, technical checks, review states and API publication. Observation quality, interpretation, script originality and relevant image selection require a content pilot. Complete discovery of important details and professional direction without review are not guaranteed.
 
-Ключевые решения до разработки: TTS-провайдер/голос с нужными правами, модель визуального анализа и API-доступ, разрешённые исходники пилота, бюджет и выбранный визуальный шаблон. Практичное начальное ограничение — один жанр, один голос, один канал.
+Claims/strikes, legality of each excerpt, automatic fair-use decisions, monetization approval and audience success cannot be guaranteed. Before implementation choose a licensed provider/voice, visual-analysis model and API access, authorized pilot sources, budget and initial template. Start with one genre, one voice and one channel.
 
-## Проверенные источники
+## Source references
 
-- YouTube различает reused/inauthentic content и copyright. Содержательная критика/комментарий могут соответствовать правилам монетизации; однотипный массовый контент и небольшие изменения не дают автоматического допуска: [monetization policies](https://support.google.com/youtube/answer/1311392?hl=en).
-- Fair use зависит от обстоятельств и юрисдикции; автоматическая система не устанавливает его, а добавление своего материала не даёт универсальной защиты: [Fair use on YouTube](https://support.google.com/youtube/answer/9783148?hl=en).
-- Реалистичные существенные синтетические изменения могут требовать раскрытия: [AI disclosure](https://support.google.com/youtube/answer/14328491?hl=en).
-- Возможность TTS с таймкодами: [ElevenLabs speech with timing](https://elevenlabs.io/docs/api-reference/text-to-speech/convert-with-timestamps). Коммерческие условия нужно выбирать отдельно: [TTS capabilities and commercial use](https://elevenlabs.io/docs/overview/capabilities/text-to-speech).
+- [YouTube monetization policies](https://support.google.com/youtube/answer/1311392?hl=en): reused/inauthentic content and copyright are distinct; meaningful commentary does not automatically clear rights.
+- [Fair use on YouTube](https://support.google.com/youtube/answer/9783148?hl=en): applicability depends on circumstances and jurisdiction.
+- [AI disclosure](https://support.google.com/youtube/answer/14328491?hl=en): substantial realistic synthetic changes may need disclosure.
+- [ElevenLabs timed speech](https://elevenlabs.io/docs/api-reference/text-to-speech/convert-with-timestamps) and [TTS capabilities/commercial use](https://elevenlabs.io/docs/overview/capabilities/text-to-speech).
 
-Эти источники описывают правила/возможности, но не одобряют конкретный будущий ролик или лицензию на конкретный трейлер.
+These references describe rules and capabilities; they do not approve a particular future video or license a particular trailer.

@@ -1,55 +1,51 @@
-# Generate Reel с новой музыкой и голосом
+# Generate Reel with new music and voice
 
-Реализовано 16 ноября 2026 года. Этот режим встроен в обычную нарезку и не требует нового авторского сценария.
+Implemented November 16, 2026. This mode is part of normal clip generation and does not require a new commentary script.
 
-## Рабочий процесс
+## Workflow
 
-1. Загрузите YouTube-ссылку и выполните анализ, как раньше.
-2. В библиотеке выберите один, несколько или до 100 клипов. Для одной партии из 50 нужны 50 существующих кандидатов; анализ не обязан находить 50 хороших фрагментов в каждом исходнике. Поле количества анализа теперь допускает до 100; прежний внутренний предел визуальной проверки в 8 кандидатов снят. Большому облачному анализу также нужен достаточный лимит запросов OpenAI/Gemini.
-3. Нажмите Generate Reel. Общие настройки кадра и субтитров остаются доступны.
-4. В «Звуковая дорожка» выберите:
-   - «Использовать настройки звука каждого клипа» — сохраняет ранее настроенные планы;
-   - «Оставить исходный звук» — обычная нарезка;
-   - «Новая AI-музыка · убрать речь и исходный звук» — полностью новая инструментальная дорожка;
-   - «Новая AI-музыка + переозвучить те же слова» — новая инструментальная музыка и новый выбранный голос на основе распознанного текста.
-5. Выберите настроение/темп/инструменты, задайте уровни музыки и голоса.
-6. Подтвердите генерацию в ElevenLabs; это расходует тариф. Оставьте включённым скачивание ZIP.
-7. Нажмите «Создать и скачать ZIP». В очереди появятся подготовка речи, генерация музыки, рендер и QC. ZIP ждёт завершения всех выбранных рендеров.
+1. Import a YouTube URL and analyze it normally.
+2. Select one to 100 clips in Library. A batch of 50 requires 50 existing candidates; analysis is not guaranteed to find 50 strong moments in every source. Analysis count supports up to 100 and the former eight-candidate visual-review cap was removed. Large cloud analyses also need sufficient provider request limits.
+3. Click Generate Reel. Shared framing and caption settings remain available.
+4. Under Soundtrack, choose the existing per-clip audio settings, original audio, new AI music replacing all original sound, or new AI music plus a chosen voice reading the same recognized words.
+5. Set mood, tempo, instruments, music level and voice level.
+6. Confirm ElevenLabs generation and credit use. Keep ZIP download enabled if desired.
+7. Create and download ZIP. Queue handles speech preparation, music generation, rendering and QC. ZIP waits for all selected renders.
 
-Одиночный клип: Clip Studio → Аудио → те же режимы → сохранить план → Generate Reel. Для новой музыки/голоса нужны те же ключ и Voice ID ElevenLabs, которые уже сохранены в настройках.
+For a single clip, choose the same modes in Clip Studio → Audio, save the plan and Generate Reel. New music/voice uses the ElevenLabs key and Voice ID saved in Settings.
 
-## Что заменяется
+## What changes
 
-При двух новых режимах оригинальная аудиодорожка вообще не участвует в выходном звуке. Удаляются исходная музыка, голоса, шумы и эффекты. В режиме переозвучки модель TTS читает распознанные слова выбранным голосом, а не клонирует актёров. Интонация оригинала, отдельные голоса персонажей и синхронизация губ не сохраняются.
+Both replacement modes exclude the original audio completely, including music, speech, noise and effects. Revoicing reads recognized words in the chosen TTS voice; it does not clone original actors. Original intonation, character-specific voices and lip synchronization are not retained.
 
-Ошибки Whisper попадут в новую речь. Перед большой партией проверьте транскрипцию/исправления слов в Clip Studio. Для речи посложнее можно выбрать Whisper base/small и повторить анализ. Субтитры для нового голоса используют разметку новой озвучки, а не таймкоды старой речи.
+Whisper errors become speech errors. Review transcripts and clip-specific corrections before large batches. Base/Small can improve difficult transcription. Captions for the new voice use its new alignment rather than original speech timestamps.
 
-Музыкальная генерация получает только текстовое описание настроения, темпа и инструментов. Оригинальная песня не отправляется и не используется как аудиореференс. Это самостоятельная композиция; точное автоматическое воспроизведение характера исходной музыки не реализовано. Пресеты позволяют выбрать близкое настроение вручную.
+Music generation receives a textual mood/tempo/instrument description only. It does not receive the original song as an audio reference. It creates an independent composition; automatic reproduction of the original music's character is not implemented. Choose a similar mood manually through presets.
 
-## Тарифы и ограничения
+## Plans, limits and caching
 
-В Настройки → Озвучка есть отдельный блок Eleven Music: модель, накопительный лимит запросов и заказанных секунд. Начальные лимиты — 60 запросов и 1800 секунд. Права/кредиты Music API и TTS — разные возможности ElevenLabs. У проверенного на этом Mac ключа Music API сработал.
+Settings → Voice has a separate Eleven Music section for model, cumulative request limit and requested seconds. Initial limits are 60 requests and 1800 seconds. Music API and TTS permissions/credits are separate ElevenLabs capabilities. A historical local Music API check succeeded with a user-provided key.
 
-50 роликов по 30 секунд — до 50 запросов музыки и примерно 1500 секунд музыкальной генерации. Если нужна новая речь, дополнительно до 50 TTS-запросов. Лимит голоса нужно увеличить с учётом уже использованных проб: если использовано 5, для 50 новых нужно минимум 55 (например, 60). Сам факт повышения локальных лимитов не увеличивает лимиты/баланс тарифа ElevenLabs.
+Fifty 30-second clips can require 50 music requests and approximately 1500 generated seconds. New speech can add up to 50 TTS requests. Include previously used samples when raising limits: five used plus 50 new requests needs at least 55, for example 60. Raising local limits does not increase provider credit or plan limits.
 
-Перед постановкой партии в очередь проверяются все клипы, наличие ключа/Voice ID/слов, локальные лимиты, уже поставленные в очередь партии и кэш. При нехватке лимита партия не создаётся частично. Кредиты/коммерческие условия тарифа контролируются в ElevenLabs; денежная цена музыки и голоса приложением не предполагается.
+Before queuing, the whole batch is checked for clips, key, Voice ID, words, local limits, existing queued batches and cache hits. Insufficient limits reject the batch atomically. Monitor credits and commercial terms in ElevenLabs; the app does not assume a monetary music/voice price.
 
-Первая версия новых режимов поддерживает ролики до 180 секунд и до 1200 символов речи в одном клипе. Длительность видео сохраняется. Речь при необходимости умеренно ускоряется без изменения высоты тона; если нужно ускорение более 1.4×, рендер останавливается до генерации новой музыки. При более короткой речи остаётся музыкальный фон до конца видео. Прежние паузы между репликами не воспроизводятся точно.
+These modes support clips up to 180 seconds and 1200 speech characters per clip. Video duration is preserved. Speech may be moderately accelerated without changing pitch. If it requires more than 1.4× acceleration, rendering stops before generating new music. Shorter speech leaves music through the end. Original pauses are not reproduced exactly.
 
-Каждому клипу соответствует отдельный музыкальный запрос. Повтор неизменившегося плана переиспользует готовую музыку; изменение кадрирования не заказывает музыку заново. TTS кэшируется по тексту, голосу и модели. Подтверждённый оплаченный результат сохраняется при паузе; сетевые ошибки не вызывают автоматического платного повтора. При ошибке замены приложение не подставляет исходный звук обратно.
+Each clip has a separate music request. An unchanged audio plan reuses music; changing crop alone does not order music again. TTS is cached by text, voice and model. Confirmed paid results survive pause. Network errors do not cause automatic paid retries. Failed replacement never silently restores original audio.
 
-Сохранённые старые MP4 и исходники не переписываются. Новый рендер создаёт новую версию. Внутренний QC содержит модель, song ID при наличии, описание музыкального запроса и ссылку на условия Eleven Music. По умолчанию ZIP содержит только MP4.
+Existing MP4s and sources are not overwritten; rendering creates a new version. Internal QC records the model, song ID when available, music prompt and Eleven Music terms reference. ZIP contains MP4 only by default.
 
-## Авторские права
+## Usage rights
 
-Изменённая или заново исполненная идентичная песня не становится автоматически свободной от прав. Этот режим создаёт самостоятельную музыку по описанию и использует её на условиях выбранного [тарифа Eleven Music](https://elevenlabs.io/music-terms). Условия тарифа и основание использования исходного видео/речи нужно учитывать отдельно.
+Changing or replaying an identical song does not automatically remove rights restrictions. This mode generates independent music from a description under the selected [Eleven Music terms](https://elevenlabs.io/music-terms). Check plan terms and rights to source video/speech separately.
 
-Приложение не обещает обход Content ID или отсутствие претензий/страйков. YouTube проверяет совпадения и аудио, и видеоряда: [как работает Content ID](https://support.google.com/youtube/answer/2797370?hl=en).
+The application does not promise Content ID bypass or freedom from claims/strikes. YouTube compares both audio and images: [Content ID](https://support.google.com/youtube/answer/2797370?hl=en).
 
-## Фактическая проверка
+## Verification record
 
-- Выполнена реальная генерация 8-секундной инструментальной музыки `music_v2_5` с пользовательским ключом.
-- Через обычную очередь создан отдельный 1080×1920 MP4 «Проба новой музыки и голоса» с новой музыкой, голосом и субтитрами. Все прежние клипы сохранены; публикации нет. Отчёт.
-- FFmpeg полностью декодировал MP4, метаданные прошли очистку. Реальный MP4 воспроизведён в Chrome. Браузерный отчёт.
-- 98 backend-тестов проходят. Автотесты проверяют постановку 50 новых аудиопланов, атомарную остановку при недостатке лимита, учёт уже стоящих партий, строгую обработку ошибки без возврата оригинала, Music API-контракт/кэш. Спектральная проверка настоящих тестовых MP4 подтверждает отсутствие исходного тона и присутствие новой музыки/голоса.
-- Партия из 50 реальных платных генераций не запускалась. UI на 1440/768/390 проверен с перехватом отправки партии, без списания дополнительных кредитов.
+- A real eight-second instrumental `music_v2_5` generation was completed with a user key.
+- A separate 1080×1920 music-and-voice test MP4 was created through the ordinary queue, with new music, speech and captions. Existing clips remained intact and nothing was published.
+- FFmpeg fully decoded the sanitized MP4, and Chrome played it.
+- Automated tests cover batches of 50 audio plans, atomic limit rejection, queued-batch accounting, strict failure without original-audio fallback, Music API contracts and caching. Spectral checks on actual fixture MP4s verify removal of the original tone and presence of new music/voice.
+- Fifty actual paid generations were not run. Browser batch checks at 1440/768/390 intercepted submission without spending additional credits.

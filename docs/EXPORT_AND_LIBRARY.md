@@ -1,23 +1,23 @@
-# Пакетное создание, удаление и приватность экспорта
+# Batch generation, deletion and export privacy
 
-## Один сценарий генерации
+## One generation workflow
 
-В библиотеке отметьте до 100 клипов, при необходимости отфильтровав исходник. Нажмите Generate Reel. Единые настройки применяют выбранные формат, FPS, кадрирование, поведение Smart Crop без лица, включение и пресет субтитров ко всем выбранным монтажным планам. Их границы, сегменты, отредактированные слова и звук сохраняются. Ранее сохранённые индивидуальные планы также обновляются при включённых единых настройках. Без этого переключателя каждый план используется как есть.
+Select up to 100 clips in the Library, optionally filtering by source, then click **Generate Reel**. Unified settings apply the selected format, FPS, crop, no-face Smart Crop behavior, caption toggle and caption preset to every selected editing plan. Clip boundaries, segments, corrected words and audio are preserved. Previously saved individual plans also update when unified settings are enabled. With that toggle off, each plan is used as saved.
 
-«Создать и скачать ZIP» ставит все рендеры в постоянную очередь, затем отдельную ZIP-задачу, зависящую от их успешного завершения. Паузу рендера ZIP дожидается; при отмене или ошибке рендера ZIP показывает ошибку вместо неполного архива. Скачивание одного ZIP запускается в том браузере, где вы начали операцию. Ожидание сохраняется при обновлении страницы. Если браузер закрылся, блокирует автоматическую загрузку или вы перешли на другой браузер, нажмите «Скачать ZIP» в завершённой задаче очереди.
+**Create and download ZIP** queues all renders persistently, followed by a ZIP job that depends on their successful completion. ZIP waits for paused renders; if a render fails or is cancelled, ZIP reports an error rather than creating an incomplete archive. Automatic download runs in the browser that started the operation and survives a page refresh. If that browser is closed, blocks downloads or has changed, use **Download ZIP** on the completed queue job.
 
-Вкладка «Отобранные» и кнопка с закладкой лишь организуют подборку. Создавать ролики можно и из неотобранных кандидатов. Раздельные кнопки «Рендер выбранных/одобренных» заменены общим Generate Reel.
+The Selected tab and bookmark button organize a collection; selection is not required to generate a clip. Generate Reel replaces the former separate selected/approved render actions.
 
-## Удаление
+## Deletion
 
-Удаление требует подтверждения с названиями клипов. Удаляются выбранные записи и связанные scores/segments/projects/render history, собственные файлы всех версий MP4/ASS/SRT и кэш очищенной выдачи. Исходники, транскрипции и уже созданные ZIP остаются. Операция необратима после подтверждения. При ошибке транзакции перемещённые файлы восстанавливаются. Для клипов с незавершёнными рендерами или ZIP удаление блокируется до завершения/отмены задач. Повторное использование старого кэша анализа не восстанавливает удалённые идентификаторы. Новый анализ с другими настройками может предложить новые клипы из тех же участков исходника.
+Deletion requires confirmation listing the clip names. It removes selected records and associated scores, segments, projects, render history, all owned MP4/ASS/SRT versions and sanitized-download caches. Sources, transcripts and existing ZIP files remain. Confirmed deletion cannot be undone. If the transaction fails, moved files are restored. Deletion is blocked while clips have unfinished render or ZIP jobs; finish or cancel those first. Reusing an old analysis cache does not restore deleted IDs. A new analysis with different settings may suggest new clips from the same source intervals.
 
-## Что находится в файлах
+## File contents
 
-Новые MP4 не копируют исходные пользовательские теги и главы. Убираются title/artist/comment/creation_time/location и программные encoder-теги; не добавляются название студии, AI-провайдер, source URL или внутренние оценки. Убирается SEI-блок программного кодировщика в H.264. Проводятся проверка оставшихся тегов и полное декодирование результата. У старых готовых MP4 при выдаче создаётся кэшированная очищенная копия с копированием аудио/видеопотоков, без повторного кодирования. Сохранённые исходные файлы не переписываются.
+New MP4s do not copy source user tags or chapters. The exporter removes title, artist, comment, creation_time, location and software encoder tags. It does not add the studio name, AI provider, source URL or internal scores. It removes the H.264 software encoder SEI block, checks remaining tags and fully decodes the result. For older ready MP4s, downloading creates a cached sanitized copy by copying audio/video streams without re-encoding. Saved originals are not overwritten.
 
-Полностью лишённый технической информации MP4 невозможен: остаются контейнер, кодеки, размер кадра, FPS, длительность, таблицы сэмплов и нейтральные служебные поля дорожек. Проверяемый список тегов допускает MP4 major_brand/minor_version/compatible_brands и нейтральные language=und/VideoHandler/SoundHandler/vendor_id=0. Внутренний отчёт JSON/CSV хранится в SQLite/проекте и попадает в ZIP только при явно включённом переключателе. По умолчанию ZIP содержит только MP4, без SRT/ASS и отчётов; даты ZIP-записей нейтральные, не даты рендера. Ранее уже созданные ZIP автоматически не переписываются.
+MP4 cannot be stripped of all technical information: container, codecs, dimensions, FPS, duration, sample tables and neutral track fields remain. The tag allowlist permits major_brand, minor_version, compatible_brands and neutral language=und, VideoHandler, SoundHandler and vendor_id=0 fields. Internal JSON/CSV reports stay in SQLite/project storage and enter ZIP only when explicitly enabled. By default, ZIP contains MP4 files only, without SRT/ASS or reports. ZIP entry dates are neutral rather than render timestamps. Existing ZIP archives are not rewritten automatically.
 
-Очистка тегов не делает видео неопределяемым и не заменяет правила раскрытия AI-контента или авторские права. YouTube отдельно указывает создание субтитров и геймплей среди примеров, обычно не требующих AI-disclosure; реалистичные существенные синтетические изменения могут требовать раскрытия. Content ID сравнивает сами звук/изображение, а не только метаданные: [AI disclosure](https://support.google.com/youtube/answer/14328491), [Content ID](https://support.google.com/youtube/answer/2797370?hl=ru).
+Tag cleanup does not make a video undetectable or replace copyright and AI-disclosure obligations. Content ID compares actual audio and images, rather than metadata alone. See [YouTube AI disclosure](https://support.google.com/youtube/answer/14328491?hl=en) and [Content ID](https://support.google.com/youtube/answer/2797370?hl=en) for platform guidance.
 
-Проверки текущей реализации: QA, живой браузерный сценарий, аудит скачанных MP4.
+Implementation checks include automated QA, a live browser workflow and inspection of downloaded MP4 files.

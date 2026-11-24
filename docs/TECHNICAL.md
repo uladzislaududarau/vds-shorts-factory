@@ -1,68 +1,68 @@
-# VDS Shorts Factory — технические подробности
+# VDS Shorts Factory: technical documentation
 
-Краткая установка — в [README](../README.md).
+See [README](../README.md) for installation.
 
-Локальная студия для macOS, Windows и Linux: React + TypeScript + Vite + Tailwind, shadcn-style Button на Radix, FastAPI, SQLite, MLX Whisper, OpenCV, PySceneDetect и FFmpeg. Сервер слушает **http://127.0.0.1:8765**.
+The local studio supports macOS, Windows and Linux. Its stack includes React, TypeScript, Vite, Tailwind, a Radix-based button, FastAPI, SQLite, MLX Whisper, OpenCV, PySceneDetect and FFmpeg. The server listens at **http://127.0.0.1:8765**.
 
-## Запуск для разработчика
+## Developer setup
 
-Из папки проекта: `./start.command`, `./stop.command`, `./doctor.command`. Сервер работает как служба macOS launchd и не зависит от окна «Терминала». `./scripts/setup.command` ставит окружение для разработки: Python 3.11 через uv в проект, зависимости из `backend/requirements-runtime.lock`, сборка UI. Ему нужны Node.js 22.12+ и FFmpeg/FFprobe в PATH. `.venv/bin/python scripts/build_app.py` создаёт приложение VDS Shorts Factory, которое запускает эту папку.
+From the project directory, use `./start.command`, `./stop.command` and `./doctor.command`. On macOS the server runs through launchd, independently of Terminal. `./scripts/setup.command` creates a Python 3.11 development environment with uv, installs `backend/requirements-runtime.lock` and builds the UI. It requires Node.js 22.12+ and FFmpeg/FFprobe on PATH. `.venv/bin/python scripts/build_app.py` creates a launcher application for this checkout.
 
-Собранный UI (`frontend/dist`) хранится в репозитории, чтобы пользователю не нужен был Node.js для сборки. После изменений во `frontend/src` выполните `npm --prefix frontend run build` до коммита. Списки пакетов: `backend/requirements-runtime.lock` (Mac с Apple Silicon), `backend/requirements-macos-intel.lock` (Mac с Intel), `backend/requirements-portable.lock` (Windows и Linux). Команды для их пересчёта — в заголовках файлов. Автотесты и установку с нуля на Windows, Linux и Mac запускает GitHub Actions (`.github/workflows/tests.yml`).
+Production UI files in `frontend/dist` are committed so users do not need to build the UI. After editing `frontend/src`, run `npm --prefix frontend run build` before committing. Dependency sets are `backend/requirements-runtime.lock` for Apple Silicon, `backend/requirements-macos-intel.lock` for Intel Mac, and `backend/requirements-portable.lock` for Windows/Linux. Each lockfile header documents regeneration. GitHub Actions runs unit tests and fresh-install checks on all three operating systems through `.github/workflows/tests.yml`.
 
-## Основной сценарий
+The marketing website is maintained in a separate private repository. It must not be added to this application repository.
 
-**Из YouTube:** «Добавить видео» → YouTube → «Войти в YouTube» → войти в отдельном Chrome → «Я вошёл — подключить». Вставить ссылку, подтвердить права и нажать «Скачать и анализировать». Скачивание и последующий анализ выполняются в постоянной очереди. Подробно: [YOUTUBE.md](YOUTUBE.md).
+## Main workflow
 
-1. Открыть исходники → добавить MP4/MOV/MKV/WebM, несколько файлов или папку. Указать права и основание.
-2. Анализировать → выбрать длительность, язык, профиль и порог. Без ключа работает MLX + локальное ранжирование.
-3. Открыть кандидата → проверить контекст в исходнике → одобрить → Clip Studio.
-4. Настроить сегменты, формат, crop, субтитры и звук → Generate Reel.
-5. Дождаться QC → воспроизвести **готовый MP4**, скачать MP4/ASS/SRT. В библиотеке доступен пакетный ZIP с CSV/JSON.
+For YouTube, use Add video → YouTube → Sign in to YouTube, finish sign-in in the dedicated Chrome profile, then connect. Paste a URL, confirm rights and choose Download and analyze. Download and downstream analysis use the persistent queue. See [YouTube](YOUTUBE.md).
 
-Веса Whisper при первом анализе загружаются из Hugging Face в `data/models/`. После загрузки обработка этого размера модели работает без сети. Исходники не уходят в облако в локальном режиме. На диске нужен запас: минимум 512 МБ плюс исходник, WAV и предполагаемый MP4. При аудите было около 3 ГБ свободного места; установка библиотек и веса занимают заметную часть.
+1. Import MP4/MOV/MKV/WebM files, multiple files or a folder; state usage rights.
+2. Configure duration, language, profile and threshold. Local Whisper and heuristic ranking work without an API key.
+3. Review a candidate in its source context and open Clip Studio.
+4. Set segments, format, crop, captions and audio, then Generate Reel.
+5. Wait for QC and watch the **ready MP4**. Download MP4/ASS/SRT; batch ZIP supports optional CSV/JSON reports.
 
-## Gemini
+Whisper weights download from Hugging Face to `data/models/` on first analysis. Afterward that model can process locally without network access. Local mode does not send source material to the cloud. Allow a 512 MB reserve plus space for the source, WAV and expected output; dependencies and weights require additional space.
 
-**OpenAI и ElevenLabs тоже доступны.** Настройки → AI и модели → OpenAI; Настройки → Озвучка → API key и Voice ID; Настройки → AI-проба → сценарий одного клипа и новая озвучка. Подробное подключение и границы пилота: [AI_CONNECTIONS.md](AI_CONNECTIONS.md). На этом Mac после ввода пользовательских ключей выполнены реальные пробы сценария и речи; результат. На другой установке нужны собственные ключи.
+## Cloud integrations
 
-Settings → AI → сохранить key → Test connection → выбрать модель из реально доступных аккаунту → включить облако. Для **каждого** анализа отдельно подтвердить отправку транскрипции и превью. Ключ хранится в `.secrets/gemini.key` с правами `0600`, каталог `0700`, не возвращается UI и исключён из Git. Доступ администратора того же компьютера к файлам не предотвращается; это локальное файловое хранение, не macOS Keychain.
+Gemini: save the key, test the connection, choose an account-accessible model and enable cloud processing. Each analysis requires separate consent to submit transcripts/previews. The key is stored in `.secrets/gemini.key` with file mode `0600` and directory mode `0700`, excluded from Git and never returned to the UI. This is local file storage, not macOS Keychain, and does not prevent local administrator access.
 
-USD-бюджет требует вручную заданных актуальных тарифов. При неизвестной цене новые облачные запросы блокируются, пока активен USD-лимит. Бюджет оценивается по токенам; фактический биллинг контролируйте у провайдера. Работает отдельный лимит числа запросов. Test connection только проверяет авторизацию и список моделей, не проверяет реальный мультимодальный анализ.
+OpenAI supports transcript analysis and selected-frame review. ElevenLabs supplies voice samples and the separate script/voice pilot, plus music/voice replacement in Generate Reel. See [AI connections](AI_CONNECTIONS.md) and [audio replacement](AUDIO_REPLACEMENT.md).
 
-## Пакетная библиотека
+An active USD budget requires user-supplied pricing. Unknown prices block new requests. Token estimates do not replace provider billing; request-count limits are separate. Test connection checks authorization/model access, rather than actual multimodal generation.
 
-**Новая звуковая дорожка в Generate Reel:** выбранные клипы → режим новой AI-музыки или музыки с переозвучкой исходных слов → очередь → готовые MP4/ZIP. Это работает без нового сценария. [Использование, лимиты и ограничения](AUDIO_REPLACEMENT.md). Замена музыки не гарантирует отсутствие претензий к видео.
+## Batch library
 
-Выберите клипы → Generate Reel → единые настройки → «Создать и скачать ZIP». Отдельные действия позволяют добавить в подборку и удалить выбранные клипы с файлами, сохранив исходники. MP4 выдаются с очищенными пользовательскими тегами; ZIP по умолчанию содержит только MP4. [Подробности библиотеки и экспорта](EXPORT_AND_LIBRARY.md).
+Select clips → Generate Reel → unified settings → Create and download ZIP. Audio replacement can generate independent AI music or revoice recognized words without writing a new script. Collection and deletion actions preserve source videos. Downloads sanitize user metadata; ZIP contains MP4 only by default. See [library/export behavior](EXPORT_AND_LIBRARY.md).
 
-## Хранение
+## Storage
 
-| Данные | Путь |
+| Data | Path |
 |---|---|
-| Оригиналы | `data/sources/` |
-| Word timestamps | `data/transcripts/` и SQLite |
-| AI-кэш | `data/ai-cache/` |
-| Монтажные планы, сцены | `data/projects/` |
-| Проверенные MP4 / ASS / SRT | `data/renders/` |
-| ZIP-экспорты | `data/exports/` |
-| База и очередь | `database/factory.sqlite3` |
-| Логи сервера | `.run/server.log` |
+| Originals | `data/sources/` |
+| Word timestamps | `data/transcripts/` and SQLite |
+| AI cache | `data/ai-cache/` |
+| Editing plans and scenes | `data/projects/` |
+| Checked MP4 / ASS / SRT | `data/renders/` |
+| ZIP exports | `data/exports/` |
+| Database and queue | `database/factory.sqlite3` |
+| Server log | `.run/server.log` |
 
-Не переносите `.venv` отдельно: ссылки Python привязаны к папке проекта. При переносе переустановите окружение. Для резервной копии остановите сервер и скопируйте `data/`, `database/`, а секреты храните отдельно.
+Do not move `.venv` separately: its Python links depend on the installation path. Recreate the environment after moving. For backup, stop the server and copy `data/` and `database/`; protect secrets separately.
 
-## Реальные ограничения
+## Practical limits
 
-- Локальное ранжирование использует фразы, паузы, плотность речи и языковые признаки. Оно не понимает смысл как LLM. Visual Interest = 0, confidence низкий; интерфейс это обозначает. Только Gemini выполняет два прохода: текстовые окна с overlap, затем реальные аудиовизуальные превью лучших кандидатов.
-- Smart crop отслеживает крупнейшее видимое лицо через Haar detector и сглаживает движение. Он не определяет активного говорящего, важные объекты и не гарантирует сохранение всех лиц. При неудаче использует полный кадр с размытием. Проверьте готовый MP4 вручную.
-- Монтаж поддерживает точные trim, несколько сегментов, сокращение длинных пауз, loudnorm, шумоподавление. Склейки прямые; автоматической художественной режиссуры и сложных мягких переходов нет.
-- Word-level captions встраиваются в файл через Pillow RGBA и FFmpeg overlay даже без libass. ASS/SRT экспортируются. В MP4 и ASS есть подсветка и короткий pop-scale. Текст слов можно исправить отдельно для клипа. Кириллица проверяется отдельным тестом. Встроенный preview приблизительный, окончательный результат — MP4.
-- QC проверяет весь файл декодированием, длительность, размер, FPS, наличие аудио и расхождение временных шкал. Он не удостоверяет сохранение смысла, точность распознавания, отсутствие клиппинга лица или субъективное качество.
-- Очередь постоянная, по одному Whisper/AI/FFmpeg. Pause/Cancel останавливают собственный подпроцесс; текущий незавершённый этап выполняется заново при Resume. Завершённые дорогие этапы кэшируются. После аварии Running возвращается в Queued; при штатном выключении работа ставится на Paused.
-- YouTube скачивается через yt-dlp с явно подключённой сессией аккаунта или без неё для публичных видео. Отдельный профиль Chrome, обновление cookies, очередь, прогресс, пауза/продолжение и автоматический анализ. Вход не снимает DRM и ограничения, которые действуют для самого аккаунта. URL-анализ Gemini без скачивания по-прежнему не обеспечивает локальный файл и word timestamps.
-- OpenAI и local LLM предусмотрены интерфейсом провайдера, но не реализованы как рабочие адаптеры. Публикации в соцсети нет.
+- Local ranking uses phrases, pauses, speech density and language features, rather than LLM-level meaning. Its Visual Interest score is zero and confidence is low. Gemini uses overlapping text windows followed by actual audio/video previews; OpenAI reviews transcript text and selected images.
+- Smart Crop tracks the largest visible face with a Haar detector and smooths motion. It does not identify the active speaker or important objects, and cannot guarantee all faces remain visible. Review the finished file and choose the appropriate no-face fallback.
+- Editing supports precise trims, segments, long-pause shortening, loudness normalization and denoising. Cuts are direct; there is no general automatic creative direction or complex transition system.
+- Word-level captions can be burned in through Pillow RGBA and FFmpeg overlay without libass. MP4/ASS support highlights and a short pop-scale. Clip-specific text correction and SRT/ASS export are available. The editor preview is approximate.
+- QC fully decodes files and checks duration, dimensions, FPS, audio and timing alignment. It does not certify meaning, transcript accuracy, face framing or subjective quality.
+- The persistent queue limits Whisper/AI/FFmpeg concurrency. Pause/Cancel stops owned subprocesses; Resume reruns unfinished stages while preserving completed caches. Crashes requeue Running jobs; normal shutdown pauses them.
+- yt-dlp supports public videos or an explicitly connected session. Authentication does not bypass DRM or account restrictions. Gemini URL analysis alone does not produce a local file or word timestamps.
+- YouTube publishing uses a separate OAuth channel connection, OpenAI text, resumable upload and an hourly schedule. A local LLM adapter and the complete author-commentary workflow remain unimplemented.
 
-## Проверка
+## Verification
 
 ```sh
 .venv/bin/python -m pytest
@@ -71,9 +71,6 @@ npm --prefix frontend run build
 .venv/bin/python scripts/e2e_batch.py
 ```
 
-Последняя команда требует запущенного сервера, создаёт **собственный тестовый материал с синтетическим macOS-голосом**, реально транскрибирует MLX, анализирует локально, рендерит и экспортирует. Это не пользовательское видео. Результат проверки записывается в `docs/e2e-result.json`. Актуальные результаты и ограничения: docs/QA.md.
+The E2E scripts require a running server and create explicitly authored test material with synthetic macOS speech. They exercise real local transcription, analysis, rendering and export. These are test fixtures, not user videos. Reports such as `docs/e2e-result.json` are generated locally and may not be committed.
 
-Подробности: [архитектура](ARCHITECTURE.md), [провайдеры](AI_PROVIDERS.md), [руководство](USER_GUIDE.md), [устранение ошибок](TROUBLESHOOTING.md).
-
-
-Автоматическая публикация готовых Shorts с OpenAI-текстами, Google OAuth, возобновляемой загрузкой и почасовым расписанием: [YOUTUBE_PUBLISHING.md](YOUTUBE_PUBLISHING.md).
+Further reading: [architecture](ARCHITECTURE.md), [providers](AI_PROVIDERS.md), [user guide](USER_GUIDE.md), [troubleshooting](TROUBLESHOOTING.md), and [YouTube publishing](YOUTUBE_PUBLISHING.md).

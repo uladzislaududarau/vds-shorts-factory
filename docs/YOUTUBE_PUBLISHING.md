@@ -1,57 +1,57 @@
-# Автоматическая публикация Shorts
+# Automatic Shorts publishing
 
-Модуль установлен в локальном приложении. Подключение канала выполняется один раз через Google OAuth. Сессия Chrome для скачивания YouTube и ключи OpenAI/ElevenLabs не дают права загружать видео в канал.
+Connect your channel once through Google OAuth. A Chrome download session and OpenAI/ElevenLabs keys do not authorize channel uploads.
 
-## Подключение
+## Connect a channel
 
-1. Откройте `http://127.0.0.1:8765/?settings=publish#settings`.
-2. В Google Cloud выберите проект, включите **YouTube Data API v3**.
-3. В Google Auth Platform настройте Branding и Audience. В режиме Testing добавьте свой аккаунт в Test users.
-4. Создайте OAuth Client типа **Web application**, например `VDS Shorts Factory Local Publisher`. Authorized redirect URI:
+1. Open `http://127.0.0.1:8765/?settings=publish#settings`.
+2. Select a Google Cloud project and enable **YouTube Data API v3**.
+3. Configure Branding and Audience in Google Auth Platform. In Testing mode, add your account to Test users.
+4. Create a **Web application** OAuth client, such as `VDS Shorts Factory Local Publisher`, with this authorized redirect URI:
    `http://127.0.0.1:8765/api/publishing/oauth/callback`
-5. Скачайте JSON клиента. В приложении нажмите **Добавить OAuth JSON**, затем **Подключить канал**. Выберите нужный канал и разрешите доступ в Google. Приложение показывает фактическое имя и ID подключённого канала.
-6. Выберите язык текстов, категорию, аудиторию «для детей / не для детей», отметку реалистичного изменённого / синтетического контента. Нажмите **Сохранить изменения**. Для MP4 с AI-музыкой требуется включённая отметка синтетического контента.
+5. Download the client JSON. In the studio, choose Add OAuth JSON, then Connect channel. Select the intended channel and consent in Google. The application shows its actual name and ID.
+6. Set text language, category, made-for-kids audience and realistic altered/synthetic-content disclosure. Save changes. MP4s with AI music require the synthetic-content flag.
 
-Для загрузки и последующего изменения расписания используется `youtube.force-ssl`: Google включает в него широкий доступ к видео, комментариям и субтитрам, в том числе удаление. Модуль приложения не удаляет видео из YouTube. При отключении аккаунта локальный refresh token удаляется; уже сохранённое расписание продолжает действовать. Отозвать разрешение Google можно в настройках безопасности аккаунта Google.
+Uploading and changing schedules uses `youtube.force-ssl`. Google defines this broadly, including access to videos, comments and captions and the ability to delete them. This module does not delete YouTube videos. Disconnecting removes the local refresh token but does not cancel schedules already saved to YouTube. Revoke Google authorization through your Google account security settings when needed.
 
-В режиме External + Testing refresh token обычно действует 7 дней. Для постоянной работы настройте Production и выполните требования Google; повторный вход может потребоваться при отзыве или истечении доступа. Одного сохранённого JSON недостаточно: нужен успешный вход с согласием и определённым каналом.
+External + Testing refresh tokens generally expire after seven days. For persistent use, configure Production and satisfy Google's requirements. Expiry or revocation may require signing in again. Saving JSON alone is insufficient; complete consent and channel selection.
 
-## Партия из 50 видео
+## A batch of 50 videos
 
-1. В **Библиотеке клипов** выберите нужные фрагменты, выполните **Generate Reel** с нужными настройками кадра и AI-звука. Дождитесь MP4.
-2. Выберите готовые актуальные MP4 → **В YouTube**.
-3. Проверьте указанный канал. Выберите **По расписанию · раз в час** или **Приватно · для проверки**.
-4. При необходимости задайте начало по времени Кипра. Без даты приложение выбирает ближайший целый час с запасом минимум 10 минут и продолжает ранее созданное расписание.
-5. Нажмите **Создать тексты и запланировать**. Операция означает согласие передать OpenAI три кадра готового видео и контекст фрагмента, создать тексты автоматически и загрузить выбранные MP4 в указанный канал.
-6. В разделе **Публикации** видны тексты, прогресс, время по Asia/Nicosia, ошибки, ссылка Studio и отмена расписания.
+1. Select clips in Library and run Generate Reel with the desired framing and AI audio. Wait for MP4s.
+2. Select current, ready MP4s → To YouTube.
+3. Verify the channel. Choose Hourly schedule or Private for review.
+4. Optionally set a start in Cyprus time. Without a date, the app selects the next whole-hour slot at least 10 minutes ahead, continuing existing schedules.
+5. Click Generate text and schedule. This consents to sending three output frames and clip context to OpenAI, automatically generating text and uploading selected MP4s to the displayed channel.
+6. Publishing shows text, progress, Asia/Nicosia times, errors, Studio links and schedule cancellation.
 
-Каждый ролик получает своё название, описание, до пяти хэштегов и до пятнадцати тегов. Исходные границы и аудиодорожка MP4 при публикации не меняются. Для данной очереди нужны MP4 9:16 до 3 минут. YouTube сам определяет показ видео в формате Shorts.
+Each video gets its own title, description, up to five hashtags and up to fifteen tags. Publishing does not change MP4 boundaries or audio. This queue requires 9:16 MP4s up to three minutes. YouTube determines whether they appear as Shorts.
 
-Для 50 роликов требуется до 50 новых запросов OpenAI на тексты. Общий лимит приложения учитывает уже использованные запросы и ожидающие публикации. Если установлен лимит 10, перед партией увеличьте его в **Настройки → AI и модели**. Денежный бюджет не повышается автоматически. Приложение проверяет бюджет перед каждым запросом; при нехватке средств задача остановится, готовые тексты сохранятся. Используется модель OpenAI из настроек, даже если поиск моментов выполнялся локально или Gemini.
+Fifty videos can require up to 50 new OpenAI text requests. The application includes used requests and pending publications in its shared limit. Raise an initial limit of 10 in Settings → AI and models before a larger batch. This does not automatically raise the monetary budget. Budget is checked before each request; insufficient budget stops the job while preserving ready text. Publishing uses the configured OpenAI model even if highlights were selected locally or with Gemini.
 
-## Загрузка и расписание
+## Upload and schedule behavior
 
-- Снимок партии закрепляет канал, ревизию MP4, контрольную сумму, монтажный план и профиль публикации.
-- Первичная загрузка всегда приватная. Полученный YouTube video ID сохраняется до назначения расписания.
-- Затем приложение сохраняет в YouTube `privacyStatus=private` и будущее `publishAt`. Прошедшее время не отправляется: YouTube трактует его как немедленную публикацию.
-- Интервал — 3600 секунд, круглосуточно. При переходе Кипра на летнее / зимнее время сохраняется фактический часовой интервал.
-- Если загрузка опоздала к своему слоту, она переносится на будущий свободный час. Серии немедленных публикаций для «догоняния» нет.
-- После подтверждения расписание исполняет YouTube. До этого для генерации и загрузки нужны работающий Mac, локальный сервер и интернет. Статус опубликованных видео сверяется при открытом экране публикаций раз в минуту и по кнопке **Проверить YouTube**.
-- Загрузка разбита на блоки по 8 МиБ, контрольные точки сохраняются на диск. После перезапуска или сетевой ошибки продолжение проверяет сессию и уже известный ID вместо повторной отправки файла.
-- Один и тот же MP4 в тот же канал повторно не ставится в очередь: проверка по SHA-256. При неопределённом результате истёкшей сессии автоматическая повторная загрузка блокируется, требуется проверка Studio.
-- **Пауза загрузок** останавливает дальнейшую подготовку/передачу и не отменяет уже назначенные публикации. Текущий сетевой запрос может завершиться до остановки.
-- Отменённую задачу можно вернуть кнопкой **Продолжить**, если ни одного блока видео ещё не отправлялось. Если данные уже отправлялись, приложение требует проверить Studio и не создаёт повторную загрузку.
-- **Снять расписание** оставляет видео приватным на YouTube. Опубликованные видео управляются через Studio. При отмене во время сетевого запроса приложение проверяет итог; если подтверждение не получено, обязательно проверьте Studio.
-- При исчерпании квоты загрузки приостанавливаются, другие виды обработки продолжаются. После восстановления квоты снимите общую паузу и продолжите ошибочные задачи. Лимиты проекта и канала могут отличаться.
+- A batch snapshot fixes the channel, MP4 revision, checksum, editing plan and publishing profile.
+- Initial uploads are always private. The returned YouTube video ID is saved before scheduling.
+- Scheduling sets `privacyStatus=private` and a future `publishAt`. Past times are not submitted because YouTube treats them as immediate publication.
+- Slots are 3600 seconds apart, around the clock. Cyprus daylight-saving changes preserve the actual hourly interval.
+- Late uploads move to a future free hour; there is no burst of immediate catch-up publications.
+- YouTube executes confirmed schedules. Before confirmation, generation and upload require the host computer, local server and internet. Publication status refreshes every minute while the screen is open and through Check YouTube.
+- Uploads use 8 MiB chunks and persist checkpoints. Resume checks the upload session and known video ID instead of blindly sending the file again.
+- SHA-256 prevents requeuing the same MP4 to the same channel. An expired session with uncertain completion blocks automatic reupload until Studio is checked.
+- Pause uploads stops further preparation/transmission, but leaves confirmed schedules intact. An in-flight network request may finish before the pause takes effect.
+- A cancelled job can Resume if no video chunk was sent. If transmission started, the app requires a Studio check and avoids creating a duplicate upload.
+- Remove schedule leaves the video private. Manage published videos in Studio. If cancellation happens during a request and the result cannot be confirmed, check Studio manually.
+- Quota exhaustion pauses uploads while other processing continues. After quota recovery, clear the global upload pause and resume failed jobs. Project and channel limits can differ.
 
-JSON OAuth-клиента, refresh token и URL сессий загрузки находятся только в `.secrets/publishing` с правами каталога `0700`, файлов `0600`. В API интерфейса, SQLite, логи и ZIP эти секреты не попадают. Тексты и история публикаций хранятся в SQLite. Оригиналы не удаляются.
+OAuth client JSON, refresh tokens and upload-session URLs are stored only in `.secrets/publishing`, with directory mode `0700` and files `0600`. They do not enter UI API responses, SQLite, logs or ZIP exports. Text and publishing history live in SQLite. Originals are preserved.
 
-API не предоставляет полную копию всех настроек Studio: модуль задаёт приватность/расписание, язык, категорию, стандартную лицензию, аудиторию, AI-отметку и отключает уведомления подписчикам при массовой загрузке. Авторские права, обработка YouTube, допуск к Shorts и монетизации не гарантируются. Замена аудио и удаление MP4-тегов не подтверждают права на видеоряд.
+This API module does not reproduce every Studio setting. It configures privacy/scheduling, language, category, standard license, audience and AI disclosure, and disables subscriber notifications for batch uploads. Copyright clearance, YouTube processing, Shorts eligibility and monetization are not guaranteed. Replacing audio or removing tags does not establish rights to the images.
 
-## Проверено
+## Verification
 
-Автоматизированные тесты: партия 50, атомарный отказ для неподготовленных файлов, лимиты, дедупликация, PKCE/state OAuth, права секретов, привязка канала, безопасный URL загрузки, возобновление, восстановление ID, приватная первоначальная загрузка, расписание, снятие расписания, отмена во время сетевого запроса, квоты и API-контракты. Проверка UI на 1440 / 768 / 390 пикселях: пустая и заполненная очередь, настройки и диалог партии. Заполненная очередь в UI QA демонстрационная, подставлена только в изолированный браузер; в реальный канал ничего не опубликовано.
+Automated tests cover batches of 50, atomic rejection of unprepared files, limits, deduplication, OAuth PKCE/state, secret permissions, channel binding, upload-URL validation, resume, ID recovery, private initial upload, scheduling/removal, cancellation during requests, quotas and API contracts. Browser checks at 1440/768/390 pixels cover empty/populated queues, settings and batch dialogs. Populated QA queues are isolated fixtures; these tests publish nothing to a real channel.
 
-До успешного OAuth и реальной приватной пробной загрузки нельзя считать проверенной работу с конкретным каналом пользователя. Все сетевые загрузки в тестах имитированы.
+A particular user's channel is not verified until OAuth and an actual private test upload succeed. Network uploads in automated tests are mocked.
 
-Документация: [YouTube insert](https://developers.google.com/youtube/data/reference/rest/v3/videos/insert), [update](https://developers.google.com/youtube/data/reference/rest/v3/videos/update), [resumable uploads](https://developers.google.com/youtube/data/guides/using_resumable_upload_protocol), [OAuth](https://developers.google.com/identity/protocols/oauth2), [AI disclosure](https://support.google.com/youtube/answer/14328491).
+References: [video insert](https://developers.google.com/youtube/data/reference/rest/v3/videos/insert), [update](https://developers.google.com/youtube/data/reference/rest/v3/videos/update), [resumable uploads](https://developers.google.com/youtube/data/guides/using_resumable_upload_protocol), [OAuth](https://developers.google.com/identity/protocols/oauth2), [AI disclosure](https://support.google.com/youtube/answer/14328491?hl=en).

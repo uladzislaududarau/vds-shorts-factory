@@ -1,39 +1,39 @@
-# YouTube → анализ → клипы
+# YouTube → analysis → clips
 
-## Подключение аккаунта
+## Connect an account
 
-1. Откройте «Добавить видео» → YouTube или Settings → YouTube.
-2. Нажмите «Войти в YouTube». Откроется обычное отдельное окно Google Chrome с профилем студии. Войдите в свой аккаунт Google на странице YouTube. Пароль и двухфакторный код вводятся только в Google.
-3. Вернитесь в студию и нажмите «Я вошёл — подключить». При запросе macOS разрешите Python доступ к Chrome Safe Storage — это нужно для чтения браузерной сессии. Студия читает только свой отдельный профиль, а не ваш обычный профиль Chrome.
-4. Дождитесь статуса «Сессия подключена». Этот статус означает сохранение сессии; доступ к конкретному видео проверяется YouTube при скачивании.
+1. Open Add video → YouTube, or Settings → YouTube.
+2. Click **Sign in to YouTube**. A separate Google Chrome window opens with the studio's dedicated profile. Sign in on YouTube; enter your password and two-factor code only in Google.
+3. Return to the studio and click **I signed in — connect**. On macOS, allow Python to access Chrome Safe Storage when prompted so it can read this browser session. Only the dedicated profile is read, never your regular Chrome profile.
+4. Wait for **Session connected**. This confirms that a session was saved; access to a specific video is checked by YouTube during download.
 
-При следующей загрузке с подключённым профилем студия обновляет сессию из него автоматически. Если вход истёк или YouTube запросил дополнительную проверку, откройте окно входа, завершите проверку и нажмите «Обновить сессию». Аккаунт должен открывать выбранный ролик, в том числе проходить возрастную проверку самого YouTube.
+For later downloads, the studio refreshes the session automatically from the connected profile. If sign-in expires or YouTube requests verification, reopen sign-in, finish verification and click **Refresh session**. The account must be able to play the video, including any YouTube age check.
 
-Если Chrome не установлен или macOS не даёт прочитать сессию, раскройте «Подключить через cookies.txt» и выберите Netscape cookies.txt, экспортированный только для youtube.com. В студию сохраняются только cookies домена YouTube; записи других сайтов отбрасываются. Пароли, коды и cookies не нужно отправлять в чат.
+If Chrome is unavailable or session access is blocked, expand **Connect using cookies.txt** and select a Netscape-format file exported only for youtube.com. Only YouTube-domain cookies are saved; other domains are discarded. Do not send passwords, codes or cookie files in chat.
 
-## Скачивание и нарезка
+## Download and cut
 
-1. Вставьте ссылку на конкретное видео, включите «Использовать мой аккаунт» для видео с ограничением доступа.
-2. Оставьте «Скачать исходник через yt-dlp» включённым. Выбирается лучший доступный формат до 1080p, предпочтительно H.264 + AAC, затем аудио и видео объединяются.
-3. Оставьте «После скачивания найти моменты» включённым. Применяются длительности, язык, профиль и порог из настроек. Облако требует отдельного согласия; без него используется локальный анализ.
-4. Укажите основание прав и подтвердите обработку. Нажмите «Скачать и анализировать».
-5. Откроется очередь: проверка доступа → скачивание с объёмом/скоростью → объединение → сохранение исходника. Затем автоматически появляется задача транскрипции и анализа.
-6. В Video Analysis выберите найденный момент, откройте Clip Studio и создайте MP4. Исходник уже локальный; повторно скачивать его не нужно. Полный монтажный сценарий описан в USER_GUIDE.md.
+1. Paste a single-video URL. Enable **Use my account** for restricted videos.
+2. Keep **Download source with yt-dlp** enabled. The studio selects the best available format up to 1080p, preferring H.264 + AAC, then merges video and audio.
+3. Keep **Find highlights after download** enabled. Duration, language, profile and threshold come from Settings. Cloud analysis needs separate consent; otherwise local analysis is used.
+4. State the basis for your usage rights, confirm processing and click **Download and analyze**.
+5. Queue shows access checking → download size/speed → merging → source import. Transcription and analysis are queued next.
+6. In Video Analysis, choose a moment, open Clip Studio and create an MP4. The source is already local and does not need another download. See the [user guide](USER_GUIDE.md) for editing.
 
-Можно выключить автоматический анализ и только сохранить исходник. Повторный запрос к уже скачанному URL использует имеющийся файл. Одинаковые незавершённые загрузки URL объединяются в одну задачу.
+Disable automatic analysis to save only the source. Repeating a completed URL uses the existing file. Duplicate unfinished downloads of the same URL are combined into one job.
 
-## Очередь
+## Queue behavior
 
-Одновременно скачивается одно видео. Pause/Cancel останавливают собственный процесс yt-dlp и его FFmpeg. Resume/Retry продолжают с имеющихся `.part`, если YouTube поддерживает продолжение выбранного потока. После штатного Stop задача остаётся на паузе, после аварии Running восстанавливается в очередь. Ссылки на потоки обновляются при новом запуске; сами секретные потоковые URL не сохраняются в SQLite.
+One video downloads at a time. Pause/Cancel stops the task's own yt-dlp and FFmpeg processes. Resume/Retry continues existing `.part` files when YouTube supports resuming that stream. A normal Stop leaves the job paused; after a crash, Running jobs return to Queued. Stream URLs refresh on restart and their secret values are not stored in SQLite.
 
-Сессия берётся в отдельную приватную копию на время загрузки, поэтому отключение аккаунта не повреждает уже начатый запрос. Чтобы прервать его, нажмите Cancel в очереди. Новые загрузки после отключения не используют аккаунт. Кнопка «Отключить от студии» удаляет сохранённую сессию студии; для выхода из Google в отдельном окне используйте меню самого YouTube.
+Each download receives a separate private session copy, so disconnecting does not corrupt an in-flight request. Cancel that job to interrupt it. New downloads after disconnect do not use the account. **Disconnect from studio** removes the saved studio session; use YouTube's menu to sign out of Google in the dedicated window.
 
-## Хранение и границы
+## Storage and limits
 
-- Профиль входа: `.secrets/youtube/browser/`; сессия: `.secrets/youtube/cookies.txt`. Каталог закрыт правами 0700, файл — 0600; они исключены из Git и не отдаются HTTP. Сам пользователь macOS и администратор могут читать эти файлы.
-- Временные видео: `data/temp/youtube-<job_id>/`; готовый исходник — `data/sources/`. SQLite содержит URL, права, состояние и прогресс, без значений cookies.
-- Сессия YouTube не отправляется Gemini. Передача транскрипции/превью в AI регулируется отдельным согласием.
-- Для скачивания нужны свободное место, FFmpeg, Node.js 22+ и согласованные версии yt-dlp/yt-dlp-ejs. Они проверяются через doctor.
-- Вход поддерживает доступ вашего аккаунта. DRM, платные права и региональные ограничения он не снимает. YouTube может ограничивать автоматические запросы или менять форматы; при отказе конкретная задача показывает причину.
+- Sign-in profile: `.secrets/youtube/browser/`; session: `.secrets/youtube/cookies.txt`. Directory permissions are `0700`, files `0600`. They are excluded from Git and HTTP responses. The local user and administrators can still read them.
+- Temporary video: `data/temp/youtube-<job_id>/`; completed source: `data/sources/`. SQLite stores the URL, rights, status and progress, without cookie values.
+- YouTube sessions are not sent to Gemini. AI transcript/preview submission requires separate consent.
+- Downloads require disk space, FFmpeg, Node.js 22+ and compatible yt-dlp / yt-dlp-ejs versions. Run doctor to check these.
+- Sign-in enables your account's existing access. It does not remove DRM, paid-access requirements or regional restrictions. YouTube can throttle automation or change formats; failed jobs show the specific reason.
 
-Используется механизм cookies, который поддерживает yt-dlp. Его Google OAuth сейчас не подходит для скачивания: [документация yt-dlp](https://github.com/yt-dlp/yt-dlp/wiki/Extractors#logging-in-with-oauth). Настройка JavaScript: [официальный EJS guide](https://github.com/yt-dlp/yt-dlp/wiki/EJS).
+This uses yt-dlp's cookie mechanism. Google OAuth is not suitable for its downloader: [yt-dlp OAuth documentation](https://github.com/yt-dlp/yt-dlp/wiki/Extractors#logging-in-with-oauth). JavaScript setup: [official EJS guide](https://github.com/yt-dlp/yt-dlp/wiki/EJS). Uploading to a channel uses a separate [publishing OAuth connection](YOUTUBE_PUBLISHING.md).

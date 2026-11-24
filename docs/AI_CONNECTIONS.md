@@ -1,69 +1,67 @@
-# OpenAI и ElevenLabs: подключение и первый тест
+# OpenAI and ElevenLabs: setup and first test
 
-Обновлено 16 ноября 2026 года. Приложение: http://127.0.0.1:8765. Обновите страницу после обновления сервера.
+Updated November 16, 2026. Application: http://127.0.0.1:8765. Refresh the page after updating the server.
 
-## Что реализовано
+## Implemented features
 
-- Провайдер OpenAI для существующего поиска моментов: транскрипция → кандидаты → проверка выборочных кадров лучших фрагментов. Требуется скачанный локальный исходник. Оригинальное аудио и непрерывное видео OpenAI в этом адаптере не получает.
-- Раздельные ключи Gemini, OpenAI и ElevenLabs, хранение на backend в `.secrets/` с правами каталога 0700 / файлов 0600. В ответах API — только признаки наличия ключей. Это файловое хранение на Mac, не Keychain.
-- Настройка Voice ID и TTS-модели ElevenLabs; проверка доступа без синтеза.
-- Короткая проба голоса: MP3, прослушивание/скачивание, разметка символов, кэш по тексту/голосу/модели.
-- AI-проба одного библиотечного клипа до 90 секунд: шесть кадров + доступная транскрипция → английский сценарий → редактирование → озвучка. Результат имеет статус «Нужна проверка».
+- OpenAI highlight selection: transcript → candidates → selected-frame review. This requires a downloaded local source. The adapter does not send original audio or continuous video to OpenAI.
+- Separate Gemini, OpenAI and ElevenLabs keys stored on the backend in `.secrets/`, with directory permissions `0700` and file permissions `0600`. API responses expose only whether a key exists. This is file storage, not macOS Keychain.
+- ElevenLabs Voice ID and TTS-model settings, with access testing that does not synthesize speech.
+- Short voice samples: MP3 playback/download, character alignment and caching by text/voice/model.
+- An AI pilot for one library clip up to 90 seconds: six frames plus available transcript → English script → editing → speech. Results are marked **Needs review**.
 
-Новый MP4 с авторской речью, сценарная раскадровка, юридическая проверка прав и публикация в YouTube этим пилотом не реализованы. Обычные клипы и исходники не изменяются.
+The script pilot does not create a final MP4 with original commentary, a storyboard, a legal rights assessment or a YouTube publication. Ordinary clips and sources remain unchanged.
 
-Отдельное последующее обновление: в обычный Generate Reel добавлена новая музыка и переозвучка **исходных распознанных слов**, без нового сценария. Этот режим уже создаёт MP4/ZIP: [AUDIO_REPLACEMENT.md](AUDIO_REPLACEMENT.md). Сценарный пилот описанный ниже остаётся отдельным экспериментом.
+A later addition to ordinary Generate Reel creates new music and revoices the **original recognized words**, without a new script. That mode already produces MP4/ZIP: see [audio replacement](AUDIO_REPLACEMENT.md). The script pilot below remains a separate experiment.
 
 ## 1. OpenAI
 
-1. Откройте [Настройки → AI и модели](http://127.0.0.1:8765/?settings=ai#settings).
-2. Выберите «OpenAI · транскрипция + кадры».
-3. Введите свой API-ключ и нажмите «Сохранить изменения» либо Test connection (он сначала сохраняет введённые настройки).
-4. Test connection загружает доступные ключу модели через `/v1/models`. Он не генерирует текст, не проверяет баланс и не гарантирует поддержку vision/structured outputs. При ограниченном ключе нужны соответствующие права чтения моделей и создания Responses.
-5. Выберите доступную модель с изображениями и structured outputs. Универсальный ID не подставляется: доступ аккаунтов и возможности моделей различаются.
-6. Включите «Разрешить облачную обработку».
-7. Укажите актуальные входной/выходной тарифы за миллион токенов для выбранной модели. Начальный оценочный бюджет OpenAI — $2, лимит — 10 попыток генерации. Оба накопительные, не суточные. Без цен активный USD-бюджет блокирует генерацию. При смене модели обновите её тарифы.
-8. Сохраните настройки.
+1. Open [Settings → AI and models](http://127.0.0.1:8765/?settings=ai#settings).
+2. Select **OpenAI · transcript + frames**.
+3. Enter your API key and click Save changes or Test connection; testing first saves the entered settings.
+4. Test connection retrieves models through `/v1/models`. It does not generate text, check your balance or guarantee vision/structured-output support. Restricted keys need the relevant model-read and Responses permissions.
+5. Select an accessible model supporting images and structured outputs. No universal model ID is inserted because account access and capabilities differ.
+6. Enable **Allow cloud processing**.
+7. Enter current input/output prices per million tokens for the selected model. The initial estimated OpenAI budget is $2 and the request limit is 10 generation attempts. Both are cumulative, not daily. An active USD budget blocks generation without prices. Update prices when changing models.
+8. Save settings.
 
-Для обычного анализа дополнительно подтвердите отправку при запуске. Без согласия используется локальная эвристика. Для OpenAI сначала скачайте исходник: один URL не даёт этому адаптеру доступ к видео.
+Ordinary analysis also requires submission consent at launch. Without it, the application uses local heuristics. Download the source before using OpenAI; a URL alone does not grant this adapter video access.
 
-Запросы идут только с backend на `api.openai.com`, Responses API, `store:false`, строгая JSON-схема. При активном бюджете перед генерацией считается реальный мультимодальный ввод через `/v1/responses/input_tokens`, добавляется запас на формат/схему и максимум выходных токенов (включая reasoning). Локальная оценка не заменяет биллинг провайдера. Ошибки, незавершённые ответы и неизвестный расход не выдаются за бесплатные запросы. Автоматических повторов генерации нет; валидный оплаченный ответ кэшируется даже при паузе во время ожидания ответа.
+Only the backend calls `api.openai.com`, using the Responses API, `store:false` and a strict JSON schema. With an active budget, `/v1/responses/input_tokens` counts actual multimodal input before generation, with allowances for schema/format overhead and maximum output tokens including reasoning. Local estimates do not replace provider billing. Errors, incomplete responses and unknown usage are not described as free. Generation has no automatic retries. A valid paid response is cached even if the job was paused while awaiting it.
 
 ## 2. ElevenLabs
 
-1. Откройте [Настройки → Озвучка](http://127.0.0.1:8765/?settings=voice#settings).
-2. Введите API-ключ ElevenLabs, скопируйте Voice ID выбранного голоса из ElevenLabs → Voices.
-3. Сохраните, нажмите Test connection. Проверяется выбранный голос и доступные TTS-модели; синтез не выполняется. Если `voices_read` / `models_read` отключены, приложение сообщает об этом, но не запрещает отдельную пробу синтеза. Для неё нужно право Text to Speech и доступ к выбранному голосу. Необязательно расширять права ключа ради чтения каталога.
-4. Выберите доступную TTS-модель. Начальное значение — `eleven_multilingual_v2`; доступность проверяется по аккаунту.
-5. В блоке «Проба голоса» введите короткий текст (до 1200 символов), отметьте согласие и нажмите «Создать пробу голоса».
-6. Прослушайте результат или скачайте MP3.
+1. Open [Settings → Voice](http://127.0.0.1:8765/?settings=voice#settings).
+2. Enter your ElevenLabs API key and copy the chosen Voice ID from ElevenLabs → Voices.
+3. Save and Test connection. This checks the selected voice and available TTS models without synthesis. If `voices_read` / `models_read` are disabled, the app reports that but still allows a separate synthesis sample with Text to Speech permission and access to the chosen voice. Catalog-read access is not required just to synthesize.
+4. Select an available TTS model. The initial value is `eleven_multilingual_v2`; availability depends on the account.
+5. Enter up to 1200 characters in Voice sample, confirm consent and click Create voice sample.
+6. Listen or download the MP3.
 
-Начальный лимит — 10 попыток синтеза. Это лимит запросов, не денежный бюджет. Фактическую стоимость/кредиты контролируйте в ElevenLabs. Повтор того же текста, голоса и модели использует существующее аудио без нового запроса. При изменении текста или голоса старая аудиопроба скрывается. При ошибке синтез автоматически не повторяется.
+The initial limit is 10 synthesis attempts. This is a request count, not a monetary budget. Monitor actual costs/credits in ElevenLabs. Repeating identical text, voice and model uses cached audio. Changing text or voice hides the old sample. Synthesis errors do not trigger automatic paid retries.
 
-Подходящие условия коммерческого использования голоса/тарифа нужно проверить отдельно. Проба голоса сама по себе не подтверждает лицензию.
+Check commercial-use terms for the chosen plan and voice separately. A successful voice sample does not establish a license.
 
-## 3. Полный пробный цикл
+## 3. Complete pilot cycle
 
-1. Откройте [Настройки → AI-проба](http://127.0.0.1:8765/?settings=pilot#settings).
-2. Выберите клип до 90 секунд из скачанного исходника. Используются начальные/конечные границы самого кандидата, а не произвольные склейки его монтажного плана.
-3. Подтвердите отправку кадров/транскрипции в OpenAI и текста в ElevenLabs при озвучке.
-4. Нажмите «Создать сценарий OpenAI». Проверьте наблюдения и таймкоды, самостоятельно подтвердите выводы. Ссылка на существующий кадр не доказывает правильность интерпретации.
-5. Отредактируйте английский текст, затем нажмите «Озвучить сценарий ElevenLabs».
-6. Прослушайте и скачайте MP3. Монтаж речи в финальное видео — следующий этап разработки.
+1. Open [Settings → AI pilot](http://127.0.0.1:8765/?settings=pilot#settings).
+2. Select a clip up to 90 seconds from a downloaded source. The pilot uses the candidate's start/end boundaries, rather than arbitrary segments from its editing plan.
+3. Consent to sending frames/transcript to OpenAI and script text to ElevenLabs for speech.
+4. Click Generate OpenAI script. Check observations and timestamps and independently verify conclusions. A real frame reference does not prove that its interpretation is correct.
+5. Edit the English text and click Voice script with ElevenLabs.
+6. Listen and download MP3. Combining that speech into a final video remains a later development stage.
 
-Пилот не исследует интернет, не проверяет юридически права и не публикует видео. Английский сценарий и гипотезы требуют редакторского просмотра. Последняя сгенерированная проба сохраняется на диске и открывается при возвращении на вкладку; её озвучка также восстанавливается, если текст совпадает и аудиофайл существует. Ручные правки черновика существуют в текущем экране, поэтому скопируйте их перед уходом/перезагрузкой. Аудиопробы — временные файлы; «Хранилище → Очистить временный кэш» удаляет их. Очистка блокируется на время AI/TTS-запроса.
+The pilot does not research the internet, verify legal rights or publish videos. Scripts and hypotheses need editorial review. The latest generated sample persists on disk and reopens on return; matching speech is restored if the audio still exists. Manual draft edits live in the current screen, so copy them before navigating away or reloading. Audio samples are temporary: Storage → Clear temporary cache removes them. Cleanup is blocked during AI/TTS requests.
 
-## Проверка реализации
+## Verification
 
-Backend-тесты используют изолированную SQLite и имитацию ответов провайдеров: JSON-контракт, учёт/бюджет, отсутствие автоматических повторов, сохранение оплаченного результата при паузе, отсутствие ключей в ответах/ошибках валидации, обязательное согласие и проверка таймкодов. FFmpeg реально декодирует тестовую MP3-пробу.
+Backend tests use isolated SQLite and mocked providers to check JSON contracts, usage/budgets, no automatic retries, paid-result preservation on pause, key redaction in responses/validation errors, consent and timestamp validation. FFmpeg actually decodes the MP3 fixture.
 
-Браузерная проверка на 1440/768/390px: настройки OpenAI/ElevenLabs/AI-пробы, состояние без согласия, черновик, редактирование, обработка ошибки и воспроизведение MP3. AI/TTS-ответы в браузерной проверке смоделированы; реальных платных запросов нет. Отчёт.
+Browser checks at 1440/768/390 pixels cover settings, pilot consent, drafts, editing, errors and MP3 playback. Provider responses in those browser checks are simulated and spend no credits.
 
-После ввода пользовательских ключей выполнены реальные пробы GPT-6.1 Terra и ElevenLabs. Первый сценарий содержал произносимые таймкоды; задание уточнено, второй сценарий получен без них и озвучен примерно за 31 секунду. Последняя проба доступна во вкладке AI-проба. Полное декодирование MP3 проверено. Это проверка работоспособности интеграций, а не подтверждение фактов/редакторского качества каждого будущего ролика. У ключа ElevenLabs отсутствовали права чтения каталога, но синтез с указанным Voice ID успешно работал.
+Historical local checks with user-provided keys exercised actual OpenAI script generation and ElevenLabs speech. A first script read timestamps aloud; a refined prompt produced a script without them and approximately 31 seconds of speech. The MP3 fully decoded. Catalog-read permission was absent on the ElevenLabs key, but synthesis using the specified Voice ID worked. These checks demonstrate integration, not factual or editorial accuracy of future scripts. Pricing must be checked for the selected model when configuring a new installation; do not rely on historical test prices. Never include keys in chat, reports or screenshots.
 
-Для выбранной GPT-6.1 Terra проверены стандартные тарифы на 16 ноября 2026 года: $1 вход / $5 выход за миллион токенов. Поля настроек и оценка уже полученных токенов приведены к этим значениям; бюджет $2 сохранён. [Официальная страница модели](https://developers.openai.com/api/docs/models/gpt-6.1-terra). Сами ключи в чат, отчёты и скриншоты отправлять не нужно.
+## Service documentation
 
-## Документация сервисов
-
-- [OpenAI: изображения](https://developers.openai.com/api/docs/guides/images-vision), [структурированные ответы](https://developers.openai.com/api/docs/guides/structured-outputs), [Responses API](https://developers.openai.com/api/reference/resources/responses/methods/create).
-- [ElevenLabs: речь с таймкодами](https://elevenlabs.io/docs/api-reference/text-to-speech/convert-with-timestamps).
+- OpenAI: [images](https://developers.openai.com/api/docs/guides/images-vision), [structured outputs](https://developers.openai.com/api/docs/guides/structured-outputs), [Responses API](https://developers.openai.com/api/reference/resources/responses/methods/create).
+- ElevenLabs: [speech with timestamps](https://elevenlabs.io/docs/api-reference/text-to-speech/convert-with-timestamps).
