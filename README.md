@@ -66,19 +66,6 @@ On Apple Silicon, MLX Whisper transcribes speech using the GPU. Other systems us
 
 Read the [user guide](docs/USER_GUIDE.md), [montage guide](docs/MONTAGE.md), [YouTube download guide](docs/YOUTUBE.md), [publishing guide](docs/YOUTUBE_PUBLISHING.md), [OpenAI and ElevenLabs setup](docs/AI_CONNECTIONS.md), [troubleshooting guide](docs/TROUBLESHOOTING.md) or [developer documentation](docs/TECHNICAL.md).
 
-## Support the project
-
-VDS Shorts Factory is free and open source. Donations help fund maintenance and new features. The application also includes a **Karma** dialog with wallet addresses and QR codes.
-
-| Asset | Network | Address |
-|---|---|---|
-| BTC | Bitcoin | `bc1q8vn6mv7vk2lnlfa3my896cynksxkpl6jnzzezg` |
-| ETH · USDT · USDC · BNB | Ethereum (ERC-20) · BSC (BEP-20) | `0x7cDC8cBbD9AFFaB70B54587A4282e17272CE8c62` |
-| SOL | Solana | `8Vz1gj6cnaSw1eM3SFtfmyx8JfgVbbVU2mbWYUh5BtZJ` |
-| TRX · USDT | Tron (TRC-20) | `TP1dznp6UirK4yeAhpigSV56U3kndS95CN` |
-
-Send assets only over the listed network.
-
 ## License
 
 [MIT](LICENSE). See [THIRD_PARTY_NOTICES.md](THIRD_PARTY_NOTICES.md) for third-party components. Only process videos you have the right to use.
