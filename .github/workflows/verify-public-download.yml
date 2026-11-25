@@ -1,0 +1,39 @@
+name: Verify public macOS download
+on:
+  workflow_dispatch:
+permissions:
+  contents: read
+jobs:
+  verify:
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    steps:
+      - uses: actions/checkout@v4
+      - name: Verify website redirects, complete DMG and resumed download
+        shell: bash
+        run: |
+          python3 - <<'PY'
+          import hashlib, json, pathlib, urllib.request
+          manifest = json.loads(pathlib.Path('.github/release-assets/macos-1.0.1.json').read_text())
+          url = 'https://shorts-factory.xyz/downloads/' + manifest['filename']
+          headers = {'User-Agent': 'Mozilla/5.0 VDS-Download-Verification/1.0'}
+          with urllib.request.urlopen(urllib.request.Request(url, headers=headers, method='HEAD'), timeout=90) as response:
+              assert response.status == 200
+              assert int(response.headers['Content-Length']) == manifest['size']
+              assert 'attachment' in response.headers['Content-Disposition']
+          digest = hashlib.sha256()
+          size = 0
+          first = b''
+          with urllib.request.urlopen(urllib.request.Request(url, headers=headers), timeout=90) as response:
+              while data := response.read(1024 * 1024):
+                  if not first:
+                      first = data[:100]
+                  digest.update(data)
+                  size += len(data)
+          assert size == manifest['size'], f'Incomplete download: {size}'
+          assert digest.hexdigest() == manifest['sha256'], 'Checksum mismatch'
+          with urllib.request.urlopen(urllib.request.Request(url, headers={**headers, 'Range': 'bytes=0-99'}), timeout=90) as response:
+              assert response.status == 206
+              assert response.read() == first
+          print('PASS: public website download, full file, SHA-256 and HTTP Range:', size, digest.hexdigest())
+          PY
