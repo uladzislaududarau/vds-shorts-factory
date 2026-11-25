@@ -3,6 +3,12 @@
 .run/
 .secrets/
 .env
+.env.*
+!.env.example
+# Local Apple signing keys and exported private certificates
+AuthKey_*.p8
+*.p12
+*.pfx
 node_modules/
 data/**
 database/**
