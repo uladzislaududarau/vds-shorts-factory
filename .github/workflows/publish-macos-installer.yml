@@ -1,0 +1,56 @@
+name: Publish verified macOS installer
+on:
+  workflow_dispatch:
+permissions:
+  contents: read
+jobs:
+  publish:
+    runs-on: ubuntu-latest
+    timeout-minutes: 20
+    permissions:
+      contents: write
+    steps:
+      - uses: actions/checkout@v4
+      - name: Assemble and verify the signed installer
+        env:
+          ASSET_ORIGIN: https://b3738b5e-vds-shorts-factory-website.phewcy-dev.workers.dev
+        shell: bash
+        run: |
+          python3 - <<'PY'
+          import concurrent.futures, hashlib, json, os, pathlib, time, urllib.request
+          manifest = json.loads(pathlib.Path('.github/release-assets/macos-1.0.1.json').read_text())
+          temporary = pathlib.Path(os.environ['RUNNER_TEMP'])
+          parts = temporary / 'verified-parts'
+          parts.mkdir(exist_ok=True)
+          def fetch(item):
+              target = parts / pathlib.PurePosixPath(item['path']).name
+              for attempt in range(5):
+                  try:
+                      request = urllib.request.Request(os.environ['ASSET_ORIGIN'] + item['path'], headers={'User-Agent': 'VDS-Release-Verification/1.0'})
+                      with urllib.request.urlopen(request, timeout=90) as response:
+                          data = response.read()
+                      assert len(data) == item['size'], 'Part size mismatch'
+                      assert hashlib.sha256(data).hexdigest() == item['sha256'], 'Part checksum mismatch'
+                      target.write_bytes(data)
+                      return target
+                  except Exception:
+                      if attempt == 4:
+                          raise
+                      time.sleep(2 ** attempt)
+          with concurrent.futures.ThreadPoolExecutor(max_workers=4) as pool:
+              paths = list(pool.map(fetch, manifest['parts']))
+          output = temporary / manifest['filename']
+          digest = hashlib.sha256()
+          with output.open('wb') as file:
+              for path in paths:
+                  data = path.read_bytes()
+                  digest.update(data)
+                  file.write(data)
+          assert output.stat().st_size == manifest['size'], 'Installer size mismatch'
+          assert digest.hexdigest() == manifest['sha256'], 'Installer checksum mismatch'
+          print('Verified installer:', output.name, output.stat().st_size, digest.hexdigest())
+          PY
+      - name: Attach verified DMG to release
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: gh release upload v1.0.1 "$RUNNER_TEMP/VDS-Shorts-Factory-1.0.1-macOS-arm64.dmg" --clobber --repo "$GITHUB_REPOSITORY"

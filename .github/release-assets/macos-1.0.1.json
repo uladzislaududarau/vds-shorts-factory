@@ -1,0 +1,724 @@
+{
+  "filename": "VDS-Shorts-Factory-1.0.1-macOS-arm64.dmg",
+  "version": "1.0.1",
+  "size": 298081634,
+  "sha256": "fef5f76e1206971e1a07ee2f33c4f5778345809fa9e9b23e24a3f02fba78d1b3",
+  "chunkSize": 2097152,
+  "parts": [
+    {
+      "path": "/assets/download-parts/macOS-1.0.1-2m-fef5f76e1206/chunk-000.bin",
+      "size": 2097152,
+      "sha256": "80e0c87c867a289c2c084423d4033d7424df8fe0b2a7b0af3513669373002f24"
+    },
+    {
+      "path": "/assets/download-parts/macOS-1.0.1-2m-fef5f76e1206/chunk-001.bin",
+      "size": 2097152,
+      "sha256": "837332e6f8561f37fe120d8c972f09c770b16afff8f9cc96cc61b319ba6c59c2"
+    },
+    {
+      "path": "/assets/download-parts/macOS-1.0.1-2m-fef5f76e1206/chunk-002.bin",
+      "size": 2097152,
+      "sha256": "bbbf2fce1ebc8db78481777b65e0280ee5bc38fc34ff02a853bcd04f7fd529bc"
+    },
+    {
+      "path": "/assets/download-parts/macOS-1.0.1-2m-fef5f76e1206/chunk-003.bin",
+      "size": 2097152,
+      "sha256": "820ea4aa106b791c144c92ee684a22e925c72392f97d8e1803347f3d543eaf06"
+    },
+    {
+      "path": "/assets/download-parts/macOS-1.0.1-2m-fef5f76e1206/chunk-004.bin",
+      "size": 2097152,
+      "sha256": "5cce8898b08bb55c5f921af527c74ad3ae7f6192b59518153a9345ede0fa7250"
+    },
+    {
+      "path": "/assets/download-parts/macOS-1.0.1-2m-fef5f76e1206/chunk-005.bin",
+      "size": 2097152,
+      "sha256": "a048c2605c3e86291e692ee329eacc9f0bcfb1cf6e78a0426a50c98354abe25e"
+    },
+    {
+      "path": "/assets/download-parts/macOS-1.0.1-2m-fef5f76e1206/chunk-006.bin",
+      "size": 2097152,
+      "sha256": "ecdf9636f23fbcc96ff52567660b5120a13e39c0fab948238de352b07f54f002"
+    },
+    {
+      "path": "/assets/download-parts/macOS-1.0.1-2m-fef5f76e1206/chunk-007.bin",
+      "size": 2097152,
+      "sha256": "c4536375a276784118f2bbc2d05055ba64439b6b00e780c9f5962685b2e9a830"
+    },
+    {
+      "path": "/assets/download-parts/macOS-1.0.1-2m-fef5f76e1206/chunk-008.bin",
+      "size": 2097152,
+      "sha256": "6fb1a7f2cd6c97758b0731f5a3fd72392ccd428210e765feb2c9a8ee177d1126"
+    },
+    {
+      "path": "/assets/download-parts/macOS-1.0.1-2m-fef5f76e1206/chunk-009.bin",
+      "size": 2097152,
+      "sha256": "a90bec29fe9d94744b288b1a4e3cc8b0310f8c0cd66a859caa49dd575f3d1ffb"
+    },
+    {
+      "path": "/assets/download-parts/macOS-1.0.1-2m-fef5f76e1206/chunk-010.bin",
+      "size": 2097152,
+      "sha256": "a65b58737f070e6ce7ff8c8e147233a2daf7de5d9b541fd069434d8e739c0059"
+    },
+    {
+      "path": "/assets/download-parts/macOS-1.0.1-2m-fef5f76e1206/chunk-011.bin",
+      "size": 2097152,
+      "sha256": "f9bbdc62404426d5a282309e31a69be84c25b1be2f6d38abdd23333ccbbad56c"
+    },
+    {
+      "path": "/assets/download-parts/macOS-1.0.1-2m-fef5f76e1206/chunk-012.bin",
+      "size": 2097152,
+      "sha256": "512ae49e968cab570d3d1b900c9552fe6b772c7b7a0ccd80137da94f26f65e07"
+    },
+    {
+      "path": "/assets/download-parts/macOS-1.0.1-2m-fef5f76e1206/chunk-013.bin",
+      "size": 2097152,
+      "sha256": "840e84108fd88fce58c78e073d9f4b02ae4f7003ac929c4fb9810704c0a9b5d1"
+    },
+    {
+      "path": "/assets/download-parts/macOS-1.0.1-2m-fef5f76e1206/chunk-014.bin",
+      "size": 2097152,
+      "sha256": "802fad8faaafb65724e1c25ed3c2ce57804b0e192dda59ef746fbac60a72a1d5"
+    },
+    {
+      "path": "/assets/download-parts/macOS-1.0.1-2m-fef5f76e1206/chunk-015.bin",
+      "size": 2097152,
+      "sha256": "184d316663e109ab8dda3c23a89ad5657c3eaf06bcb2e43a72ce048e29c96a8d"
+    },
+    {
+      "path": "/assets/download-parts/macOS-1.0.1-2m-fef5f76e1206/chunk-016.bin",
+      "size": 2097152,
+      "sha256": "7aec7097926074aba1ee7def48e1f52eab00d220af54865c03502adc71e6fba2"
+    },
+    {
+      "path": "/assets/download-parts/macOS-1.0.1-2m-fef5f76e1206/chunk-017.bin",
+      "size": 2097152,
+      "sha256": "cae1f6b5ae84d5d034dd87139b227c04c7bcb8c1966cd5b636c075b4b89d410a"
+    },
+    {
+      "path": "/assets/download-parts/macOS-1.0.1-2m-fef5f76e1206/chunk-018.bin",
+      "size": 2097152,
+      "sha256": "fc0b15921e5a8b9f80bf0ef2a5138e5e3fac058c9f6ff15a5471ea10a13265b9"
+    },
+    {
+      "path": "/assets/download-parts/macOS-1.0.1-2m-fef5f76e1206/chunk-019.bin",
+      "size": 2097152,
+      "sha256": "55b37e9f775c2ba2152c29f261fa7b1b374b0017ceed9b3a35267e16785dbd35"
+    },
+    {
+      "path": "/assets/download-parts/macOS-1.0.1-2m-fef5f76e1206/chunk-020.bin",
+      "size": 2097152,
+      "sha256": "770bf1e81c2fabfc7c7a772c0d0c809091ab53954d4d376d3e2d2d0b992a0571"
+    },
+    {
+      "path": "/assets/download-parts/macOS-1.0.1-2m-fef5f76e1206/chunk-021.bin",
+      "size": 2097152,
+      "sha256": "fcab79ae9ece89846eea272b96c47ff8182eb0b4565a392f62f2648c9cf312ca"
+    },
+    {
+      "path": "/assets/download-parts/macOS-1.0.1-2m-fef5f76e1206/chunk-022.bin",
+      "size": 2097152,
+      "sha256": "744bc6209d55a0dbceae3fdff9cd9934c10a923b4e21151f2d4295fdfeb8c70b"
+    },
+    {
+      "path": "/assets/download-parts/macOS-1.0.1-2m-fef5f76e1206/chunk-023.bin",
+      "size": 2097152,
+      "sha256": "11ed0087329dceab1d295dd57a6ad70516f98633291c2b578cf93fd83e1eaec2"
+    },
+    {
+      "path": "/assets/download-parts/macOS-1.0.1-2m-fef5f76e1206/chunk-024.bin",
+      "size": 2097152,
+      "sha256": "12b8809495bce1dcc4a608e331f9dbae8609873a0ffacf33be485e6b361c0bc8"
+    },
+    {
+      "path": "/assets/download-parts/macOS-1.0.1-2m-fef5f76e1206/chunk-025.bin",
+      "size": 2097152,
+      "sha256": "fde15ab8b114f4275abc4aa90699860f93cd2f4e3d800e66d1e776a4ddb82c5f"
+    },
+    {
+      "path": "/assets/download-parts/macOS-1.0.1-2m-fef5f76e1206/chunk-026.bin",
+      "size": 2097152,
+      "sha256": "c1f738df75b8e6508197d310542807f1217557d1758864e1147f5f48b4b9a34a"
+    },
+    {
+      "path": "/assets/download-parts/macOS-1.0.1-2m-fef5f76e1206/chunk-027.bin",
+      "size": 2097152,
+      "sha256": "0b9821a50e0fb490661d7391f06e2b7c354995c84923a44d1154aac60bfecf08"
+    },
+    {
+      "path": "/assets/download-parts/macOS-1.0.1-2m-fef5f76e1206/chunk-028.bin",
+      "size": 2097152,
+      "sha256": "c09f7e994b9547a3c9b7d837e4b4487184169b76c3869180b1ea64aae7486e4e"
+    },
+    {
+      "path": "/assets/download-parts/macOS-1.0.1-2m-fef5f76e1206/chunk-029.bin",
+      "size": 2097152,
+      "sha256": "661ac0441ae9be637190e2a339986e2a963fed749e1c01c695ca4647078e11c0"
+    },
+    {
+      "path": "/assets/download-parts/macOS-1.0.1-2m-fef5f76e1206/chunk-030.bin",
+      "size": 2097152,
+      "sha256": "54c55d3124fa7e0d36b9e36977575ec00efc059eecb24b0f3f0506a0d8cc5fc0"
+    },
+    {
+      "path": "/assets/download-parts/macOS-1.0.1-2m-fef5f76e1206/chunk-031.bin",
+      "size": 2097152,
+      "sha256": "f0e9cc78fe852eba6fb3aa6b1fa5fe56fd3ffc59286df85d81bce39c0f505ddf"
+    },
+    {
+      "path": "/assets/download-parts/macOS-1.0.1-2m-fef5f76e1206/chunk-032.bin",
+      "size": 2097152,
+      "sha256": "3640eb897be45f8dc857fc04f12838d947e3ab0e8763e2d34368c3eb5e574b02"
+    },
+    {
+      "path": "/assets/download-parts/macOS-1.0.1-2m-fef5f76e1206/chunk-033.bin",
+      "size": 2097152,
+      "sha256": "8f558327be6dcb6910424986e7bd64e915946e0d76f061f0d24a92f49393f133"
+    },
+    {
+      "path": "/assets/download-parts/macOS-1.0.1-2m-fef5f76e1206/chunk-034.bin",
+      "size": 2097152,
+      "sha256": "a95cf415558af2fb1f65dafee8c376955afa7a4e52ad0b99c3137a97a6690ad2"
+    },
+    {
+      "path": "/assets/download-parts/macOS-1.0.1-2m-fef5f76e1206/chunk-035.bin",
+      "size": 2097152,
+      "sha256": "76ed9c4168bcf38fba7d84c6de67e6957c8dc71730da4c198ff96aa1fc33810d"
+    },
+    {
+      "path": "/assets/download-parts/macOS-1.0.1-2m-fef5f76e1206/chunk-036.bin",
+      "size": 2097152,
+      "sha256": "ad94b36ef46e27534afee984bd6cdd215d3a0f6f6bef0862365b68c4010f4e12"
+    },
+    {
+      "path": "/assets/download-parts/macOS-1.0.1-2m-fef5f76e1206/chunk-037.bin",
+      "size": 2097152,
+      "sha256": "205d4897f2c89241471f3cc569bb7756146c6ace5e31cffdb26017783744bea1"
+    },
+    {
+      "path": "/assets/download-parts/macOS-1.0.1-2m-fef5f76e1206/chunk-038.bin",
+      "size": 2097152,
+      "sha256": "e9a0a7abae8d280f40cf336684d66801cb85bb127899b8b94f831e9e82f98498"
+    },
+    {
+      "path": "/assets/download-parts/macOS-1.0.1-2m-fef5f76e1206/chunk-039.bin",
+      "size": 2097152,
+      "sha256": "12c0f6d21a12f31f09d94d44a41fc354bd09a77289bf5d73309f7ad90c4a3b49"
+    },
+    {
+      "path": "/assets/download-parts/macOS-1.0.1-2m-fef5f76e1206/chunk-040.bin",
+      "size": 2097152,
+      "sha256": "2bf82a0375c45804d7ce045ba82306a82b0f950f72d3175f6a346ea99633726b"
+    },
+    {
+      "path": "/assets/download-parts/macOS-1.0.1-2m-fef5f76e1206/chunk-041.bin",
+      "size": 2097152,
+      "sha256": "468b1aad8f4029c2f4dcb0535981eda66c2ff7397fe3d48d4bde9bbaea06fa83"
+    },
+    {
+      "path": "/assets/download-parts/macOS-1.0.1-2m-fef5f76e1206/chunk-042.bin",
+      "size": 2097152,
+      "sha256": "767f38bf04a53c2becb75496d47002b20e8c55fcb60c9cafe62458aefec9d67e"
+    },
+    {
+      "path": "/assets/download-parts/macOS-1.0.1-2m-fef5f76e1206/chunk-043.bin",
+      "size": 2097152,
+      "sha256": "80455495734b6f9ec40a108a0149b81cfc9e46b479268f91e4e55dee2ec68ecf"
+    },
+    {
+      "path": "/assets/download-parts/macOS-1.0.1-2m-fef5f76e1206/chunk-044.bin",
+      "size": 2097152,
+      "sha256": "e1bb48757dc99ca865e5a919ecfaf5a41448464df51797393fdc0b75f9617014"
+    },
+    {
+      "path": "/assets/download-parts/macOS-1.0.1-2m-fef5f76e1206/chunk-045.bin",
+      "size": 2097152,
+      "sha256": "64ac032c188988955aac40d155b757134a0b5cf49206a8d9e7fb7ede9dcb9aa0"
+    },
+    {
+      "path": "/assets/download-parts/macOS-1.0.1-2m-fef5f76e1206/chunk-046.bin",
+      "size": 2097152,
+      "sha256": "462f0ba6ec5f22cd9b8242458bac81fe4ebdd550581a3ece9d988e2f4ee9ea09"
+    },
+    {
+      "path": "/assets/download-parts/macOS-1.0.1-2m-fef5f76e1206/chunk-047.bin",
+      "size": 2097152,
+      "sha256": "b3dfc8b829b7202e69fc152169e2ea88746d6ecda17ee1b7f78cf31c3bb132d8"
+    },
+    {
+      "path": "/assets/download-parts/macOS-1.0.1-2m-fef5f76e1206/chunk-048.bin",
+      "size": 2097152,
+      "sha256": "451ee72ac119c98596da8b1d477438482c27955100004a92571e57db4393bbaf"
+    },
+    {
+      "path": "/assets/download-parts/macOS-1.0.1-2m-fef5f76e1206/chunk-049.bin",
+      "size": 2097152,
+      "sha256": "48afa5b59a28d95e30668804d2a4431b6d29d709f47397d8da4a3999f15c5eed"
+    },
+    {
+      "path": "/assets/download-parts/macOS-1.0.1-2m-fef5f76e1206/chunk-050.bin",
+      "size": 2097152,
+      "sha256": "066cb7e49819105f2c39ca2ded69dc27aeb399822def1d441a039f1d3b1909ca"
+    },
+    {
+      "path": "/assets/download-parts/macOS-1.0.1-2m-fef5f76e1206/chunk-051.bin",
+      "size": 2097152,
+      "sha256": "9578369524c24a9fdc06085b063faac484c01d84c7128a9562dc3ecf9058ffb3"
+    },
+    {
+      "path": "/assets/download-parts/macOS-1.0.1-2m-fef5f76e1206/chunk-052.bin",
+      "size": 2097152,
+      "sha256": "64293d9ebdef553f2c5f5eb31f4e5357acff06dc4aa3abeddf8d8206d124ecfc"
+    },
+    {
+      "path": "/assets/download-parts/macOS-1.0.1-2m-fef5f76e1206/chunk-053.bin",
+      "size": 2097152,
+      "sha256": "03ddb14ac3fe9cdd6a5e573ba110f1675df6e2e2e373aee2dd4f331382f96c8a"
+    },
+    {
+      "path": "/assets/download-parts/macOS-1.0.1-2m-fef5f76e1206/chunk-054.bin",
+      "size": 2097152,
+      "sha256": "ff43c87f44a7173352d7bee216d1e9f5b6d565ff1fc1cf365cd3e3ce33b74f60"
+    },
+    {
+      "path": "/assets/download-parts/macOS-1.0.1-2m-fef5f76e1206/chunk-055.bin",
+      "size": 2097152,
+      "sha256": "96457634cf71efee817059e17faf78d1046c1d83882ca38459c518382ad2af23"
+    },
+    {
+      "path": "/assets/download-parts/macOS-1.0.1-2m-fef5f76e1206/chunk-056.bin",
+      "size": 2097152,
+      "sha256": "3b18ca8cbebcaa96c32ba1b357bbd4c174b70611e0b0aba009b2f5a332912709"
+    },
+    {
+      "path": "/assets/download-parts/macOS-1.0.1-2m-fef5f76e1206/chunk-057.bin",
+      "size": 2097152,
+      "sha256": "ccf9bda7fe07a3de72a5b748a9e276e356ca12c6e7e6576a48f05aa019cf27bc"
+    },
+    {
+      "path": "/assets/download-parts/macOS-1.0.1-2m-fef5f76e1206/chunk-058.bin",
+      "size": 2097152,
+      "sha256": "3808ebccea607ad6d59f4f014e5a18dae9531ba3d9eaabfff55133fb617c1c6e"
+    },
+    {
+      "path": "/assets/download-parts/macOS-1.0.1-2m-fef5f76e1206/chunk-059.bin",
+      "size": 2097152,
+      "sha256": "449f03b162ddaa1c3c347cba501072c769d6375e99962531b2875af7e68aa821"
+    },
+    {
+      "path": "/assets/download-parts/macOS-1.0.1-2m-fef5f76e1206/chunk-060.bin",
+      "size": 2097152,
+      "sha256": "5e327d2bf61f7044a843fd1f142bef90db3eccb31252198b101297ad7c1856f5"
+    },
+    {
+      "path": "/assets/download-parts/macOS-1.0.1-2m-fef5f76e1206/chunk-061.bin",
+      "size": 2097152,
+      "sha256": "44df8221598807a604969edd579ddfb9fb1f05f95b91e3c35ebc6ca9a16b2ab0"
+    },
+    {
+      "path": "/assets/download-parts/macOS-1.0.1-2m-fef5f76e1206/chunk-062.bin",
+      "size": 2097152,
+      "sha256": "7df6ecef8c156091877000d0a11936816acaed40c13349173575a3b12ceb1c62"
+    },
+    {
+      "path": "/assets/download-parts/macOS-1.0.1-2m-fef5f76e1206/chunk-063.bin",
+      "size": 2097152,
+      "sha256": "cc719a179064dcef75d8f23d39487f62d377820838606a7ca192fdfb36612258"
+    },
+    {
+      "path": "/assets/download-parts/macOS-1.0.1-2m-fef5f76e1206/chunk-064.bin",
+      "size": 2097152,
+      "sha256": "17352de77c38f5c5103521753611c7b8e6fc99a056189df9135b3d83c52d4ea6"
+    },
+    {
+      "path": "/assets/download-parts/macOS-1.0.1-2m-fef5f76e1206/chunk-065.bin",
+      "size": 2097152,
+      "sha256": "e6408ba8280670c593dbcdde118e5e06aaf9cd5449ca77c566a8ae4d0f2bc5e7"
+    },
+    {
+      "path": "/assets/download-parts/macOS-1.0.1-2m-fef5f76e1206/chunk-066.bin",
+      "size": 2097152,
+      "sha256": "7bc02cfc08cdf1cd64203093432be0bf3c0bf37d6e94e387d8e78950614bf59c"
+    },
+    {
+      "path": "/assets/download-parts/macOS-1.0.1-2m-fef5f76e1206/chunk-067.bin",
+      "size": 2097152,
+      "sha256": "ccdba09d8f4f0be94cf2fd773c4aaa4eb0c2261b17ca20a464e054de988ab983"
+    },
+    {
+      "path": "/assets/download-parts/macOS-1.0.1-2m-fef5f76e1206/chunk-068.bin",
+      "size": 2097152,
+      "sha256": "f8b6279aa8ad5a22d9fa812279f82622c82c17fee1389c96b0651bc83ba59237"
+    },
+    {
+      "path": "/assets/download-parts/macOS-1.0.1-2m-fef5f76e1206/chunk-069.bin",
+      "size": 2097152,
+      "sha256": "0b9e2c4776247e4650b889894f60afc60e3594634e0f0091d704af8adfe7e96d"
+    },
+    {
+      "path": "/assets/download-parts/macOS-1.0.1-2m-fef5f76e1206/chunk-070.bin",
+      "size": 2097152,
+      "sha256": "2a049203484d1055b55918cbeea2d9f38645294cf3248e59635f14899b03442b"
+    },
+    {
+      "path": "/assets/download-parts/macOS-1.0.1-2m-fef5f76e1206/chunk-071.bin",
+      "size": 2097152,
+      "sha256": "04a17fd0e94c4032d2a9f381702a1fbe199282bb2f5e21b60b6e6420ddf7a2cb"
+    },
+    {
+      "path": "/assets/download-parts/macOS-1.0.1-2m-fef5f76e1206/chunk-072.bin",
+      "size": 2097152,
+      "sha256": "694ee104e2b974311a81da8ddbf0ec4409a05f2cccf30e3de827faac7e025615"
+    },
+    {
+      "path": "/assets/download-parts/macOS-1.0.1-2m-fef5f76e1206/chunk-073.bin",
+      "size": 2097152,
+      "sha256": "6159b4ad121fec346f28b63c3580a91db6b0ee5bf581e72e32d676287180807e"
+    },
+    {
+      "path": "/assets/download-parts/macOS-1.0.1-2m-fef5f76e1206/chunk-074.bin",
+      "size": 2097152,
+      "sha256": "0fc8ab757867e99fff62850acb2a57a2aab1be07a07dfe103c48d02638d29b25"
+    },
+    {
+      "path": "/assets/download-parts/macOS-1.0.1-2m-fef5f76e1206/chunk-075.bin",
+      "size": 2097152,
+      "sha256": "1a7f5a9f6a9a043bbe2b1d1205940652646ac421f2741ace4cfa98171609269e"
+    },
+    {
+      "path": "/assets/download-parts/macOS-1.0.1-2m-fef5f76e1206/chunk-076.bin",
+      "size": 2097152,
+      "sha256": "c1cc9d720054b35a92289689d94f18c25b2dd20a36e0815bc2cca951240662c4"
+    },
+    {
+      "path": "/assets/download-parts/macOS-1.0.1-2m-fef5f76e1206/chunk-077.bin",
+      "size": 2097152,
+      "sha256": "fc262f650528884900a2759201b179e70621792475e5e88ac0b3d51d04d11b3f"
+    },
+    {
+      "path": "/assets/download-parts/macOS-1.0.1-2m-fef5f76e1206/chunk-078.bin",
+      "size": 2097152,
+      "sha256": "8c34414262ab131941168fa86119b34fadaf29bdd50ab709cf02bbc02f87b129"
+    },
+    {
+      "path": "/assets/download-parts/macOS-1.0.1-2m-fef5f76e1206/chunk-079.bin",
+      "size": 2097152,
+      "sha256": "88d304ceb7c0a289a63f4118d0589c99c9248f1a8070f72f4f6a261eedf38b63"
+    },
+    {
+      "path": "/assets/download-parts/macOS-1.0.1-2m-fef5f76e1206/chunk-080.bin",
+      "size": 2097152,
+      "sha256": "cf3b47578d16ac38db60a6052060ba40de017541bb85c37d3492466e6a73211f"
+    },
+    {
+      "path": "/assets/download-parts/macOS-1.0.1-2m-fef5f76e1206/chunk-081.bin",
+      "size": 2097152,
+      "sha256": "181aad4a941b4f6e74fb0c49fcb5147174d906a5db9b1b8fbad837b43c3c8870"
+    },
+    {
+      "path": "/assets/download-parts/macOS-1.0.1-2m-fef5f76e1206/chunk-082.bin",
+      "size": 2097152,
+      "sha256": "651a1510f6524c3399a813cddb991a8df2760f8596759b44ec7f10117fe2f51c"
+    },
+    {
+      "path": "/assets/download-parts/macOS-1.0.1-2m-fef5f76e1206/chunk-083.bin",
+      "size": 2097152,
+      "sha256": "a83d5d950324c1075c879c4f04cc82c89a8104e10b04d415b312c83d00c71e92"
+    },
+    {
+      "path": "/assets/download-parts/macOS-1.0.1-2m-fef5f76e1206/chunk-084.bin",
+      "size": 2097152,
+      "sha256": "989cdae8fe7582fa5985bcb97797e805d59fe2538712f3567a4e84dd7aabef20"
+    },
+    {
+      "path": "/assets/download-parts/macOS-1.0.1-2m-fef5f76e1206/chunk-085.bin",
+      "size": 2097152,
+      "sha256": "a96cb383b3a6e56ab351073365b50e4b7f3c73ae54316352e2103689c35ae6d0"
+    },
+    {
+      "path": "/assets/download-parts/macOS-1.0.1-2m-fef5f76e1206/chunk-086.bin",
+      "size": 2097152,
+      "sha256": "50edde67baaba27177b35217ec7b691a3d65ac2ffb2c1091fdd46ea62b793c38"
+    },
+    {
+      "path": "/assets/download-parts/macOS-1.0.1-2m-fef5f76e1206/chunk-087.bin",
+      "size": 2097152,
+      "sha256": "7316de000990cf4fc40a49cd1cbb1dad49f8190c320d9d053e14e0368469fdb6"
+    },
+    {
+      "path": "/assets/download-parts/macOS-1.0.1-2m-fef5f76e1206/chunk-088.bin",
+      "size": 2097152,
+      "sha256": "8830f7fc4ae40baaac033f62a3b823722fd19bee3b3d6f82118348a1df40ff28"
+    },
+    {
+      "path": "/assets/download-parts/macOS-1.0.1-2m-fef5f76e1206/chunk-089.bin",
+      "size": 2097152,
+      "sha256": "8bf57852c85a815182cd46d7ce7ecdff7e8a1404be965b577b36e5a157992227"
+    },
+    {
+      "path": "/assets/download-parts/macOS-1.0.1-2m-fef5f76e1206/chunk-090.bin",
+      "size": 2097152,
+      "sha256": "6c8fc0264d3e10d42a3d892d4f0ccacf977f09dd7a603578624733e6112a7e59"
+    },
+    {
+      "path": "/assets/download-parts/macOS-1.0.1-2m-fef5f76e1206/chunk-091.bin",
+      "size": 2097152,
+      "sha256": "7f0263781cf1365efc0de0e60767ab06bce0a5e18dfc7b6e77320ebe0fbf4936"
+    },
+    {
+      "path": "/assets/download-parts/macOS-1.0.1-2m-fef5f76e1206/chunk-092.bin",
+      "size": 2097152,
+      "sha256": "1d6514e27d2ab426e07281f3f5720d6a356a86f51d4719adbf875c541d2f418b"
+    },
+    {
+      "path": "/assets/download-parts/macOS-1.0.1-2m-fef5f76e1206/chunk-093.bin",
+      "size": 2097152,
+      "sha256": "3bf752fc40bec87696ca7dbbe3eedd7794dbd34ff84ba28026619a3193c0922b"
+    },
+    {
+      "path": "/assets/download-parts/macOS-1.0.1-2m-fef5f76e1206/chunk-094.bin",
+      "size": 2097152,
+      "sha256": "50bb56b13cab225cee499b0b361185f471e431bd02bdaa3d57a0b81b6aa33352"
+    },
+    {
+      "path": "/assets/download-parts/macOS-1.0.1-2m-fef5f76e1206/chunk-095.bin",
+      "size": 2097152,
+      "sha256": "38351e7783ea2b99e1c5b81ab92cfd0a4076118bd4e753187f617d6bdacebc22"
+    },
+    {
+      "path": "/assets/download-parts/macOS-1.0.1-2m-fef5f76e1206/chunk-096.bin",
+      "size": 2097152,
+      "sha256": "c117beb2c2da8590a2c75691a2e678a77a239c7702bb125a01e886b51b0eb93f"
+    },
+    {
+      "path": "/assets/download-parts/macOS-1.0.1-2m-fef5f76e1206/chunk-097.bin",
+      "size": 2097152,
+      "sha256": "f821de8ab0ae3ce4786ce7b3c00b3e5f4e92012858eabae7c856e35f0037e79b"
+    },
+    {
+      "path": "/assets/download-parts/macOS-1.0.1-2m-fef5f76e1206/chunk-098.bin",
+      "size": 2097152,
+      "sha256": "0a35ab16336a2c8a346ca3055e890f9b88e7728a36c28a1c1ceac074b1cc749a"
+    },
+    {
+      "path": "/assets/download-parts/macOS-1.0.1-2m-fef5f76e1206/chunk-099.bin",
+      "size": 2097152,
+      "sha256": "11b62d3691d1aa0d4f3c7b58c799dde33ce6d98e5cde5d20e00c427e82099282"
+    },
+    {
+      "path": "/assets/download-parts/macOS-1.0.1-2m-fef5f76e1206/chunk-100.bin",
+      "size": 2097152,
+      "sha256": "ec94413bdc8d127c0a38c9c849d1be55ab7d93117072f98fc076029573d3f82f"
+    },
+    {
+      "path": "/assets/download-parts/macOS-1.0.1-2m-fef5f76e1206/chunk-101.bin",
+      "size": 2097152,
+      "sha256": "95cbc96dca58ee25b7e4c2dc6ac2ed429eb525d02d4b4935811438aa3d696f47"
+    },
+    {
+      "path": "/assets/download-parts/macOS-1.0.1-2m-fef5f76e1206/chunk-102.bin",
+      "size": 2097152,
+      "sha256": "d92416a9726d146e613b0fd7acf41297f47cf0a48d8f3e75eb3ef7c71959f1e5"
+    },
+    {
+      "path": "/assets/download-parts/macOS-1.0.1-2m-fef5f76e1206/chunk-103.bin",
+      "size": 2097152,
+      "sha256": "59e9abb7dedbf8115f37610bce8567f4eec5956ed9958f51b41995cc88b28512"
+    },
+    {
+      "path": "/assets/download-parts/macOS-1.0.1-2m-fef5f76e1206/chunk-104.bin",
+      "size": 2097152,
+      "sha256": "cd6073e2dc857792f3eb742dcefacde2bf396ebb0f7abc2d894e7bc851b3f289"
+    },
+    {
+      "path": "/assets/download-parts/macOS-1.0.1-2m-fef5f76e1206/chunk-105.bin",
+      "size": 2097152,
+      "sha256": "3c3c5defaaa7687432d3dfe61da5f27adc5064e43c6036e28594e555e8fc5f7d"
+    },
+    {
+      "path": "/assets/download-parts/macOS-1.0.1-2m-fef5f76e1206/chunk-106.bin",
+      "size": 2097152,
+      "sha256": "be6770bbed63a2059f4a761dc89c97f9edef81f1cc4a8a02f37382fe044c58e8"
+    },
+    {
+      "path": "/assets/download-parts/macOS-1.0.1-2m-fef5f76e1206/chunk-107.bin",
+      "size": 2097152,
+      "sha256": "3ce48f1de71f3c5d437a3ae512f469e8e5cae187ff708139a1dca22e1b73cbea"
+    },
+    {
+      "path": "/assets/download-parts/macOS-1.0.1-2m-fef5f76e1206/chunk-108.bin",
+      "size": 2097152,
+      "sha256": "8843f91bc2414f140c2c33b74782ec2e3b22e3f8f4229df799018f8b00a89560"
+    },
+    {
+      "path": "/assets/download-parts/macOS-1.0.1-2m-fef5f76e1206/chunk-109.bin",
+      "size": 2097152,
+      "sha256": "c999330cbc4f554c7ed499db95bcc50b1759c22aa7daab23e91ed036de4a0abb"
+    },
+    {
+      "path": "/assets/download-parts/macOS-1.0.1-2m-fef5f76e1206/chunk-110.bin",
+      "size": 2097152,
+      "sha256": "cc70c864ebf87c7466506115eb44d536abceeff1a52df7fe9e439196f1a1809b"
+    },
+    {
+      "path": "/assets/download-parts/macOS-1.0.1-2m-fef5f76e1206/chunk-111.bin",
+      "size": 2097152,
+      "sha256": "96335cbca3d1d27c456736379009ed4a9e3575719d11b045d8d38581e724c0ad"
+    },
+    {
+      "path": "/assets/download-parts/macOS-1.0.1-2m-fef5f76e1206/chunk-112.bin",
+      "size": 2097152,
+      "sha256": "d2e67c05d018acac80b633b7ac004fe913da9b2446a2405a29b3a5d26f3f3b98"
+    },
+    {
+      "path": "/assets/download-parts/macOS-1.0.1-2m-fef5f76e1206/chunk-113.bin",
+      "size": 2097152,
+      "sha256": "838b9b0add286cfa64c67b047bfad14588d8830cf615f772940900b294a03357"
+    },
+    {
+      "path": "/assets/download-parts/macOS-1.0.1-2m-fef5f76e1206/chunk-114.bin",
+      "size": 2097152,
+      "sha256": "298b9b46f4c3313a5cda05306e7f01de6eabf16b20c9c939db970d9e42e7242a"
+    },
+    {
+      "path": "/assets/download-parts/macOS-1.0.1-2m-fef5f76e1206/chunk-115.bin",
+      "size": 2097152,
+      "sha256": "66d7b453fc3dfbe7624d0d11ecefa82a3a3d44caf9066121102581be2373ab6a"
+    },
+    {
+      "path": "/assets/download-parts/macOS-1.0.1-2m-fef5f76e1206/chunk-116.bin",
+      "size": 2097152,
+      "sha256": "4fc5b513189dfd6cd0907fba86dd75243575285a4ef81d609fe4bd0c31f2d732"
+    },
+    {
+      "path": "/assets/download-parts/macOS-1.0.1-2m-fef5f76e1206/chunk-117.bin",
+      "size": 2097152,
+      "sha256": "240cc6eff563117438f97778b52de20b28ada32ea122d156da2adc9e4b9905f5"
+    },
+    {
+      "path": "/assets/download-parts/macOS-1.0.1-2m-fef5f76e1206/chunk-118.bin",
+      "size": 2097152,
+      "sha256": "a0ad4db91a8eaba124fcb9cd6c093b72bc13912ad9355291ad96cdedbf8faa70"
+    },
+    {
+      "path": "/assets/download-parts/macOS-1.0.1-2m-fef5f76e1206/chunk-119.bin",
+      "size": 2097152,
+      "sha256": "d9d9dd535a5abd569e5bef292dfcc1dea4bcf48d07b00e56702706c8f3bfcd33"
+    },
+    {
+      "path": "/assets/download-parts/macOS-1.0.1-2m-fef5f76e1206/chunk-120.bin",
+      "size": 2097152,
+      "sha256": "d0467f131f0518e9ce120714325cf3b8b5ed6cc60e55c96c1cc8c34c63d3ac8c"
+    },
+    {
+      "path": "/assets/download-parts/macOS-1.0.1-2m-fef5f76e1206/chunk-121.bin",
+      "size": 2097152,
+      "sha256": "4027eb61cf4e4cd1c82820fd4367c54bb806fabbeb4c5fff25351f533df53d72"
+    },
+    {
+      "path": "/assets/download-parts/macOS-1.0.1-2m-fef5f76e1206/chunk-122.bin",
+      "size": 2097152,
+      "sha256": "6a6a3c7d027e365a88682fb7b4a2333e72c338f8b71aa08b78513433ed568118"
+    },
+    {
+      "path": "/assets/download-parts/macOS-1.0.1-2m-fef5f76e1206/chunk-123.bin",
+      "size": 2097152,
+      "sha256": "dd2f5e6675009364f5ba8b404a0eb4e1f73ef3ebe5404a19d7d0fcf052288d86"
+    },
+    {
+      "path": "/assets/download-parts/macOS-1.0.1-2m-fef5f76e1206/chunk-124.bin",
+      "size": 2097152,
+      "sha256": "c6c65bf2b4d1e0c484da2fa0a474c980879693af8dc0496aa927360ad6afac17"
+    },
+    {
+      "path": "/assets/download-parts/macOS-1.0.1-2m-fef5f76e1206/chunk-125.bin",
+      "size": 2097152,
+      "sha256": "f788831de02a73786030636d578ee2e3c6a5a8a09955d1ed32b637d61d172414"
+    },
+    {
+      "path": "/assets/download-parts/macOS-1.0.1-2m-fef5f76e1206/chunk-126.bin",
+      "size": 2097152,
+      "sha256": "2906c287c7558d14105218a1e4502ad91d09d24fe215a6c87e83ccb4ca4dc275"
+    },
+    {
+      "path": "/assets/download-parts/macOS-1.0.1-2m-fef5f76e1206/chunk-127.bin",
+      "size": 2097152,
+      "sha256": "57c84dac85d28445f9416b3c7abaaf9e1ecee3ccd41f91953459cc32329f1fb2"
+    },
+    {
+      "path": "/assets/download-parts/macOS-1.0.1-2m-fef5f76e1206/chunk-128.bin",
+      "size": 2097152,
+      "sha256": "71a0b7b8005b9841425bc8055762484f057f04f5b8dc11efc028db6876168fbc"
+    },
+    {
+      "path": "/assets/download-parts/macOS-1.0.1-2m-fef5f76e1206/chunk-129.bin",
+      "size": 2097152,
+      "sha256": "78b3a3ac496f20feffe98f518a293e340711e19e6aff6a19e042fdc328df6819"
+    },
+    {
+      "path": "/assets/download-parts/macOS-1.0.1-2m-fef5f76e1206/chunk-130.bin",
+      "size": 2097152,
+      "sha256": "37af28886e2012aa0ff39aead64facbe2977b196f2ac6fba7884f72c9cd18fc3"
+    },
+    {
+      "path": "/assets/download-parts/macOS-1.0.1-2m-fef5f76e1206/chunk-131.bin",
+      "size": 2097152,
+      "sha256": "99390ed9577cd7863d604f36b96e4c6662475b928a0a44e51df844e5f0deee8c"
+    },
+    {
+      "path": "/assets/download-parts/macOS-1.0.1-2m-fef5f76e1206/chunk-132.bin",
+      "size": 2097152,
+      "sha256": "191dba98f54ac197e6b6ede17714904f347313ab85da347a96418805a8198488"
+    },
+    {
+      "path": "/assets/download-parts/macOS-1.0.1-2m-fef5f76e1206/chunk-133.bin",
+      "size": 2097152,
+      "sha256": "1f57f69bfdf80f2352c5ed8a43912c0fa180ef6323e32a0b5605963f147d807e"
+    },
+    {
+      "path": "/assets/download-parts/macOS-1.0.1-2m-fef5f76e1206/chunk-134.bin",
+      "size": 2097152,
+      "sha256": "96e9979c396235d595fa7b788e52d16b778fce4baf6143d082eeea7f0cf38394"
+    },
+    {
+      "path": "/assets/download-parts/macOS-1.0.1-2m-fef5f76e1206/chunk-135.bin",
+      "size": 2097152,
+      "sha256": "11bf7ef186e8783154a909217a882b4dccc7d87b28c466a8a0ddd8ab23fa959b"
+    },
+    {
+      "path": "/assets/download-parts/macOS-1.0.1-2m-fef5f76e1206/chunk-136.bin",
+      "size": 2097152,
+      "sha256": "3f13e93980723e6cf350044fdfe5a2c025dfadbaedd8023b65f92b393d39afaa"
+    },
+    {
+      "path": "/assets/download-parts/macOS-1.0.1-2m-fef5f76e1206/chunk-137.bin",
+      "size": 2097152,
+      "sha256": "2766461b5ffe6ca06757ba2acf725c701eb912054bdd5debb9f012cb48540eb5"
+    },
+    {
+      "path": "/assets/download-parts/macOS-1.0.1-2m-fef5f76e1206/chunk-138.bin",
+      "size": 2097152,
+      "sha256": "409bb4867d44f25c2e6d04a920c88d62c5f4a37b4f2ffce62ce0d60753b10ba7"
+    },
+    {
+      "path": "/assets/download-parts/macOS-1.0.1-2m-fef5f76e1206/chunk-139.bin",
+      "size": 2097152,
+      "sha256": "d676d6b148f797f2bce947efcc7d66880c21fa2b320b253d728de743ef6340ab"
+    },
+    {
+      "path": "/assets/download-parts/macOS-1.0.1-2m-fef5f76e1206/chunk-140.bin",
+      "size": 2097152,
+      "sha256": "c38396ef1830708782f6b569b32aa1dd49275cea543eafb566ea92d74147852b"
+    },
+    {
+      "path": "/assets/download-parts/macOS-1.0.1-2m-fef5f76e1206/chunk-141.bin",
+      "size": 2097152,
+      "sha256": "a4d56bd197f1291d168c35ec3e37050b83f02b46b6425e937f0b029244b8b00f"
+    },
+    {
+      "path": "/assets/download-parts/macOS-1.0.1-2m-fef5f76e1206/chunk-142.bin",
+      "size": 286050,
+      "sha256": "0eb74a2b96b8baa773ebede9a2b12d581028dd9002cd609a6d163bc02387b952"
+    }
+  ]
+}
